@@ -37,3 +37,8 @@ Depois abra no Chrome do Android e escolha "Adicionar à tela inicial".
 - Botões rápidos para GPON
 - Campos específicos para cada tipo de serviço
 - Importação de texto via compartilhamento do Android
+
+
+## Atualização visual
+- Logo da Coprel Telecom no topo
+- Cores ajustadas para a identidade visual da empresa

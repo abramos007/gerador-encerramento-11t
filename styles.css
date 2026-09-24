@@ -1,20 +1,22 @@
 * { box-sizing: border-box; }
 
 :root {
-  --bg: #eef3f4;
+  --bg: #eff1fb;
   --card: #ffffff;
-  --ink: #173f4d;
-  --muted: #66757c;
-  --line: #d7e2e5;
-  --accent: #56cf8e;
-  --accent-dark: #34b97a;
-  --danger: #d94c5c;
+  --ink: #251973;
+  --ink-2: #15cddd;
+  --muted: #657086;
+  --line: #dbe0f0;
+  --accent: #15cddd;
+  --accent-dark: #0ba9b8;
+  --accent-soft: #e8fbfd;
+  --yellow: #ffd300;
 }
 
 body {
   margin: 0;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: var(--bg);
+  background: linear-gradient(180deg, #f3f4fb 0%, #eef3f4 100%);
   color: #223239;
 }
 
@@ -25,16 +27,40 @@ body {
 }
 
 .hero {
-  background: var(--ink);
+  background: linear-gradient(135deg, #251973 0%, #33258f 100%);
   color: white;
-  border-radius: 22px;
-  padding: 22px;
-  display: flex;
-  gap: 16px;
-  justify-content: space-between;
-  align-items: flex-start;
+  border-radius: 24px;
+  padding: 20px;
   margin-bottom: 14px;
-  box-shadow: 0 12px 30px rgba(23,63,77,.16);
+  box-shadow: 0 16px 34px rgba(37,25,115,.22);
+}
+
+.hero-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.brand-logo {
+  width: min(280px, 58vw);
+  max-width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,.12));
+}
+
+.hero-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.hero-content {
+  max-width: 560px;
 }
 
 .hero h1 {
@@ -45,7 +71,7 @@ body {
 
 .eyebrow {
   margin: 0 0 6px;
-  color: #8fe5b7;
+  color: #9ef8ff;
   font-weight: 800;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -59,13 +85,19 @@ body {
 }
 
 .badge {
-  flex: 0 0 auto;
-  background: rgba(255,255,255,.12);
-  border: 1px solid rgba(255,255,255,.2);
+  background: rgba(255,255,255,.14);
+  border: 1px solid rgba(255,255,255,.22);
   padding: 7px 10px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 800;
+  white-space: nowrap;
+}
+
+.badge-team {
+  background: rgba(21,205,221,.18);
+  color: #d5fdff;
+  border-color: rgba(21,205,221,.35);
 }
 
 .card {
@@ -73,7 +105,8 @@ body {
   border-radius: 20px;
   padding: 18px;
   margin-bottom: 14px;
-  box-shadow: 0 8px 24px rgba(23,63,77,.08);
+  box-shadow: 0 8px 24px rgba(37,25,115,.08);
+  border: 1px solid rgba(37,25,115,.05);
 }
 
 h2 {
@@ -93,7 +126,7 @@ label {
 input, select, textarea {
   width: 100%;
   border: 1px solid var(--line);
-  background: #fbfdfd;
+  background: #fbfcff;
   border-radius: 13px;
   padding: 13px 14px;
   font: inherit;
@@ -106,7 +139,7 @@ textarea { resize: vertical; }
 
 input:focus, select:focus, textarea:focus {
   border-color: var(--accent-dark);
-  box-shadow: 0 0 0 3px rgba(52,185,122,.12);
+  box-shadow: 0 0 0 3px rgba(21,205,221,.13);
 }
 
 .grid {
@@ -142,11 +175,11 @@ button {
 
 .success {
   background: var(--accent);
-  color: #0c3a26;
+  color: #042f34;
 }
 
 .ghost {
-  background: #edf3f5;
+  background: var(--accent-soft);
   color: var(--ink);
 }
 
@@ -170,12 +203,15 @@ button {
 
 #resultado {
   min-height: 360px;
-  background: #f8fbfb;
+  background: #f8fbff;
 }
 
 @media (max-width: 620px) {
   .grid { grid-template-columns: 1fr; }
   .full { grid-column: auto; }
-  .hero { padding: 18px; }
+  .hero { padding: 18px; border-radius: 18px; }
+  .hero-top { flex-direction: column; align-items: flex-start; margin-bottom: 14px; }
+  .hero-badges { flex-direction: row; align-items: center; flex-wrap: wrap; }
+  .brand-logo { width: min(300px, 72vw); }
   .card { padding: 16px; border-radius: 16px; }
 }
