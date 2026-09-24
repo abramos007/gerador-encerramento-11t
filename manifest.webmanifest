@@ -4,7 +4,7 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#eff1fb",
+  "background_color": "#f1f3f9",
   "theme_color": "#251973",
-  "description": "Gerador offline de encerramentos de ordens de serviço da Coprel Telecom para a Equipe 11T."
+  "description": "Ferramenta operacional offline para encerramentos da Equipe 11T."
 }

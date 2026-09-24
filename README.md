@@ -1,27 +1,28 @@
-# Gerador de Encerramento 11T — Versão Operacional v2
+# Gerador de Encerramento 11T — v3
 
-Aplicação PWA baseada na Base Operacional de Encerramentos da Equipe 11T.
+Versão focada em uso rápido no celular.
 
-## Principais recursos
-- Cola e interpreta dados copiados do MK.
-- Campos dinâmicos conforme o tipo de atendimento.
-- Validação obrigatória em trocas de equipamento.
-- Regra específica para Huawei V5.
-- Tratamento separado para IPTV de terceiros e Sky gato por antena.
-- Campos para GPON, plano, acompanhamento, materiais, OTDR e pendências.
-- Geração do relatório no padrão "Relatório de Ordem de Serviço".
-- Histórico local dos últimos encerramentos.
-- Funciona offline após o primeiro carregamento.
+## Novidades
+- Navegação: Nova OS, Histórico, Trocas e Configurações.
+- Tipos de serviço em botões grandes.
+- Presets de trocas de equipamentos.
+- Botões rápidos de GPON.
+- Botões rápidos de materiais.
+- Atalhos para reparos recorrentes.
+- Histórico pesquisável.
+- Controle de trocas separado.
+- Exportação CSV das trocas.
+- Configuração do nome da empresa e técnico padrão.
+- PWA com atualização de cache.
 
-## Atualizar no GitHub Pages pelo Termux
+## Atualizar via Termux
 
 ```bash
 cd ~/storage/downloads
-unzip -o gerador-encerramento-11t-v2-operacional.zip -d ~/projetos/gerador-encerramento-11t
+unzip -o gerador-encerramento-11t-v3.zip -d ~/projetos/gerador-encerramento-11t
+
 cd ~/projetos/gerador-encerramento-11t
 git add .
-git commit -m "Atualiza gerador para versão operacional v2"
+git commit -m "Atualiza gerador para versão 3"
 git push
 ```
-
-O app não inventa dados técnicos ausentes. Em troca de equipamento, bloqueia a geração quando faltam campos obrigatórios.
