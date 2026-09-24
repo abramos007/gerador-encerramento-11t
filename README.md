@@ -1,44 +1,27 @@
-# Gerador de Encerramento 11T
+# Gerador de Encerramento 11T — Versão Operacional v2
 
-MVP em HTML/CSS/JavaScript, sem backend.
+Aplicação PWA baseada na Base Operacional de Encerramentos da Equipe 11T.
 
-## Como testar no PC
-Abra a pasta em um servidor local. Exemplos:
+## Principais recursos
+- Cola e interpreta dados copiados do MK.
+- Campos dinâmicos conforme o tipo de atendimento.
+- Validação obrigatória em trocas de equipamento.
+- Regra específica para Huawei V5.
+- Tratamento separado para IPTV de terceiros e Sky gato por antena.
+- Campos para GPON, plano, acompanhamento, materiais, OTDR e pendências.
+- Geração do relatório no padrão "Relatório de Ordem de Serviço".
+- Histórico local dos últimos encerramentos.
+- Funciona offline após o primeiro carregamento.
 
-### VS Code
-Use a extensão Live Server e abra `index.html`.
-
-### Python
-No terminal, dentro da pasta:
+## Atualizar no GitHub Pages pelo Termux
 
 ```bash
-python -m http.server 8080
+cd ~/storage/downloads
+unzip -o gerador-encerramento-11t-v2-operacional.zip -d ~/projetos/gerador-encerramento-11t
+cd ~/projetos/gerador-encerramento-11t
+git add .
+git commit -m "Atualiza gerador para versão operacional v2"
+git push
 ```
 
-Acesse:
-http://localhost:8080
-
-## Como usar no celular
-Hospede os arquivos em GitHub Pages, Netlify, Vercel ou outro serviço estático.
-Depois abra no Chrome do Android e escolha "Adicionar à tela inicial".
-
-## Funções atuais
-- Cola os dados copiados do MK
-- Extrai cliente, OS, código e endereço
-- Tipos de atendimento predefinidos
-- Campos técnicos
-- Geração automática do relatório
-- Botão para copiar o encerramento
-- PWA com cache offline
-
-## Próximas melhorias sugeridas
-- Salvar presets de equipamentos
-- Histórico local dos últimos encerramentos
-- Botões rápidos para GPON
-- Campos específicos para cada tipo de serviço
-- Importação de texto via compartilhamento do Android
-
-
-## Atualização visual
-- Logo da Coprel Telecom no topo
-- Cores ajustadas para a identidade visual da empresa
+O app não inventa dados técnicos ausentes. Em troca de equipamento, bloqueia a geração quando faltam campos obrigatórios.

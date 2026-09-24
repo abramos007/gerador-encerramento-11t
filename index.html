@@ -4,7 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#251973" />
-  <title>Coprel Telecom | Gerador de Encerramento</title>
+  <meta name="description" content="Gerador de encerramentos de OS da Coprel Telecom para a Equipe 11T." />
+  <title>Coprel Telecom | Encerramentos 11T</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -12,137 +13,157 @@
   <main class="app">
     <header class="hero">
       <div class="hero-top">
-        <img src="coprel-telecom-logo.png" alt="Logo Coprel Telecom" class="brand-logo" />
-        <div class="hero-badges">
-          <span class="badge badge-team">Equipe 11T</span>
-          <span class="badge">Offline</span>
-        </div>
+        <img src="coprel-telecom-logo.png" alt="Coprel Telecom" class="brand-logo" />
+        <div class="hero-badges"><span class="badge badge-team">Equipe 11T</span><span class="badge">Offline</span></div>
       </div>
       <div class="hero-content">
-        <p class="eyebrow">Coprel Telecom</p>
+        <p class="eyebrow">Base Operacional</p>
         <h1>Gerador de Encerramento</h1>
-        <p class="subtitle">Cole os dados do MK, informe o atendimento e gere o texto pronto para colar na OS.</p>
+        <p class="subtitle">Cole os dados da OS, informe apenas o que realmente ocorreu e gere o relatório no padrão da Equipe 11T.</p>
       </div>
     </header>
 
+    <section class="notice"><strong>Regra principal:</strong> o app não completa dados técnicos ausentes. Em troca de equipamento, os campos obrigatórios precisam estar preenchidos antes de gerar.</section>
+
     <section class="card">
-      <h2>1. Dados copiados do MK</h2>
-      <label for="mkInput">Cole o bloco da OS</label>
-      <textarea id="mkInput" rows="6" placeholder="Exemplo:
+      <div class="section-title-row"><h2>1. Dados da OS</h2><button type="button" class="small ghost" id="pasteBtn">Colar</button></div>
+      <label for="mkInput">Bloco copiado do MK</label>
+      <textarea id="mkInput" rows="5" placeholder="Exemplo:
 DINO TRENTO
 OS - 495574 / COD 39810
 Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
-
-      <div class="actions two">
-        <button class="primary" id="parseBtn">Identificar dados</button>
-        <button class="ghost" id="clearBtn">Limpar</button>
-      </div>
-
+      <div class="actions two"><button class="primary" id="parseBtn" type="button">Identificar dados</button><button class="ghost" id="clearBtn" type="button">Limpar tudo</button></div>
       <div class="grid">
-        <div>
-          <label for="cliente">Cliente</label>
-          <input id="cliente" type="text" />
-        </div>
-        <div>
-          <label for="os">OS</label>
-          <input id="os" type="text" inputmode="numeric" />
-        </div>
-        <div>
-          <label for="codigo">Código</label>
-          <input id="codigo" type="text" inputmode="numeric" />
-        </div>
-        <div class="full">
-          <label for="endereco">Endereço</label>
-          <input id="endereco" type="text" />
-        </div>
+        <div><label for="data">Data do atendimento</label><input id="data" type="date" /></div>
+        <div><label for="os">OS</label><input id="os" type="text" inputmode="numeric" /></div>
+        <div class="full"><label for="cliente">Cliente</label><input id="cliente" type="text" /></div>
+        <div><label for="codigo">Código</label><input id="codigo" type="text" inputmode="numeric" /></div>
+        <div class="full"><label for="endereco">Endereço</label><input id="endereco" type="text" /></div>
       </div>
     </section>
 
     <section class="card">
-      <h2>2. Atendimento</h2>
+      <h2>2. Tipo de atendimento</h2>
+      <label for="tipo">Selecione o cenário</label>
+      <select id="tipo">
+        <option value="upgrade">Upgrade de plano / Troca de equipamento</option>
+        <option value="troca">Troca de equipamento</option>
+        <option value="reparo">Reparo / Cliente offline</option>
+        <option value="wifi">Wi‑Fi / Alcance / Lentidão</option>
+        <option value="instalacao">Instalação</option>
+        <option value="telefonia">Telefonia fixa</option>
+        <option value="iptv">IPTV de terceiros</option>
+        <option value="sky">Sky gato por antena</option>
+        <option value="particular">Equipamento particular / Rede interna</option>
+        <option value="ipv6">IPv6</option>
+        <option value="pesquisa">Pesquisa de satisfação</option>
+        <option value="camera">Instalação de câmera</option>
+        <option value="outro">Outro atendimento</option>
+      </select>
+      <p class="helper" id="tipoHint"></p>
+    </section>
 
+    <section class="card dynamic" id="equipSection">
+      <h2>3. Controle de equipamento</h2>
       <div class="grid">
-        <div class="full">
-          <label for="tipo">Tipo de serviço</label>
-          <select id="tipo">
-            <option value="upgrade">Upgrade de plano / Troca de equipamento</option>
-            <option value="troca">Troca de equipamento</option>
-            <option value="reparo">Reparo / Cliente offline</option>
-            <option value="wifi">Suporte Wi‑Fi / Lentidão</option>
-            <option value="instalacao">Instalação</option>
-            <option value="telefonia">Telefonia</option>
-            <option value="iptv">IPTV / Equipamento de terceiros</option>
-            <option value="dificuldade">Dificuldade / Sem falha de internet</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="equipAntigo">Equipamento anterior</label>
-          <input id="equipAntigo" type="text" placeholder="Ex.: ONU Parks" />
-        </div>
-        <div>
-          <label for="equipNovo">Equipamento instalado</label>
-          <input id="equipNovo" type="text" placeholder="Ex.: Huawei X6-10" />
-        </div>
-
-        <div>
-          <label for="plano">Plano</label>
-          <input id="plano" type="text" placeholder="Ex.: 500 Mbps" />
-        </div>
-        <div>
-          <label for="gpon">Potência GPON</label>
-          <input id="gpon" type="text" placeholder="Ex.: -24 dBm" />
-        </div>
-
-        <div>
-          <label for="telefonia">Telefonia</label>
-          <select id="telefonia">
-            <option value="na">Não se aplica</option>
-            <option value="sim">Funcionando</option>
-            <option value="nao">Com problema</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="internet">Internet</label>
-          <select id="internet">
-            <option value="sim">Funcionando</option>
-            <option value="nao">Não funcionando</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="acompanhou">Cliente acompanhou os testes?</label>
-          <select id="acompanhou">
-            <option value="sim">Sim</option>
-            <option value="nao">Não</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="responsavel">Responsável presente</label>
-          <input id="responsavel" type="text" value="Cliente" />
-        </div>
-
-        <div class="full">
-          <label for="obs">Observação adicional</label>
-          <textarea id="obs" rows="3" placeholder="Opcional"></textarea>
-        </div>
+        <div><label for="equipRet">Equipamento retirado *</label><input id="equipRet" list="equipamentos" type="text" placeholder="Ex.: ONU Huawei V5" /></div>
+        <div><label for="qtdRet">Quantidade retirada *</label><input id="qtdRet" type="number" min="1" value="1" /></div>
+        <div><label for="condicao">Condição *</label><select id="condicao"><option value="">Selecione</option><option>Boa / funcionando</option><option>Com defeito</option><option>Queimada</option><option>Não informada</option></select></div>
+        <div><label for="equipInst">Equipamento instalado *</label><input id="equipInst" list="equipamentos" type="text" placeholder="Ex.: Huawei X6-10 sem telefonia" /></div>
+        <div><label for="qtdInst">Quantidade instalada *</label><input id="qtdInst" type="number" min="1" value="1" /></div>
+        <div><label for="motivoTroca">Motivo da troca *</label><input id="motivoTroca" type="text" placeholder="Ex.: Atualização para tecnologia mais recente" /></div>
       </div>
+      <div id="equipRule" class="rule-box"></div>
+    </section>
 
-      <button class="primary wide" id="generateBtn">Gerar encerramento</button>
+    <section class="card dynamic" id="reparoSection">
+      <h2>3. Reparo / Offline</h2>
+      <div class="grid">
+        <div class="full"><label for="problema">O que foi identificado</label><textarea id="problema" rows="3" placeholder="Ex.: drop rompido, conector FAST danificado, evento no OTDR..."></textarea></div>
+        <div class="full"><label for="acao">O que foi realizado</label><textarea id="acao" rows="3" placeholder="Descreva somente o que foi feito"></textarea></div>
+        <div><label for="otdr">OTDR</label><select id="otdr"><option value="na">Não utilizado</option><option value="sim">Utilizado</option></select></div>
+        <div><label for="otdrDist">Distância / evento OTDR</label><input id="otdrDist" type="text" placeholder="Ex.: 80 m" /></div>
+        <div class="full"><label for="pendencia">Pendência / encaminhamento</label><input id="pendencia" type="text" placeholder="Ex.: equipe terceira para repasse do drop" /></div>
+      </div>
+    </section>
+
+    <section class="card dynamic" id="wifiSection">
+      <h2>3. Wi‑Fi / Rede interna</h2>
+      <div class="grid">
+        <div class="full"><label for="wifiAchado">Constatação</label><textarea id="wifiAchado" rows="3" placeholder="Ex.: alcance reduzido por distância/paredes; switch Fast Ethernet limitando a rede interna"></textarea></div>
+        <div><label for="wifiOrientacao">Orientou sobre alcance ≠ velocidade?</label><select id="wifiOrientacao"><option value="na">Não informado</option><option value="sim">Sim</option><option value="nao">Não</option></select></div>
+        <div><label for="equipParticular">Há equipamento particular?</label><select id="equipParticular"><option value="na">Não informado</option><option value="sim">Sim</option><option value="nao">Não</option></select></div>
+      </div>
+    </section>
+
+    <section class="card dynamic" id="iptvSection">
+      <h2>3. IPTV de terceiros</h2>
+      <div class="grid">
+        <div><label for="outrosApps">Outros aplicativos testados?</label><select id="outrosApps"><option value="na">Não informado</option><option value="sim">Sim</option><option value="nao">Não</option></select></div>
+        <div><label for="iptvSomente">Problema ocorre somente no IPTV?</label><select id="iptvSomente"><option value="na">Não informado</option><option value="sim">Sim</option><option value="nao">Não</option></select></div>
+      </div>
+    </section>
+
+    <section class="card dynamic" id="skySection"><h2>3. Sky gato por antena</h2><p class="helper">Este cenário é tratado separadamente e não será descrito como IPTV.</p></section>
+
+    <section class="card dynamic" id="telefoniaSection">
+      <h2>3. Telefonia</h2>
+      <div class="grid"><div><label for="numeroTel">Número (opcional)</label><input id="numeroTel" type="text" inputmode="tel" /></div><div><label for="reconfigTel">Reconfiguração realizada?</label><select id="reconfigTel"><option value="na">Não informado</option><option value="sim">Sim</option><option value="nao">Não</option></select></div></div>
+    </section>
+
+    <section class="card dynamic" id="ipv6Section">
+      <h2>3. IPv6</h2>
+      <div class="grid"><div><label for="ipv6Desat">IPv6 estava desativado?</label><select id="ipv6Desat"><option value="na">Não informado</option><option value="sim">Sim</option><option value="nao">Não</option></select></div><div><label for="ipv6Hab">IPv6 foi habilitado?</label><select id="ipv6Hab"><option value="na">Não informado</option><option value="sim">Sim</option><option value="nao">Não</option></select></div></div>
+    </section>
+
+    <section class="card dynamic" id="cameraSection">
+      <h2>3. Instalação de câmera</h2>
+      <div class="grid"><div><label for="cameraModelo">Modelo</label><input id="cameraModelo" type="text" value="Intelbras iM7 S Full Color" /></div><div><label for="cameraQtd">Quantidade</label><input id="cameraQtd" type="number" min="1" value="1" /></div><div class="full"><label for="cameraOrient">Orientações fornecidas</label><input id="cameraOrient" type="text" placeholder="Ex.: aplicativo, visualização das imagens e configurações" /></div></div>
+    </section>
+
+    <section class="card dynamic" id="genericSection">
+      <h2>3. Descrição do atendimento</h2>
+      <div class="grid"><div class="full"><label for="relatoLivre">Relato técnico</label><textarea id="relatoLivre" rows="5" placeholder="Descreva o atendimento de forma objetiva"></textarea></div></div>
+    </section>
+
+    <section class="card">
+      <h2>4. Informações técnicas</h2>
+      <div class="grid">
+        <div><label for="internet">Internet funcionando normalmente</label><select id="internet"><option value="na">Não informado</option><option value="sim">Sim</option><option value="nao">Não</option></select></div>
+        <div><label for="plano">Plano</label><input id="plano" type="text" placeholder="Ex.: 400 Mbps" /></div>
+        <div><label for="gpon">Sinal GPON</label><input id="gpon" type="text" placeholder="Ex.: -24 dBm" /></div>
+        <div><label for="acompanhou">Cliente acompanhou os testes</label><select id="acompanhou"><option value="na">Não informado</option><option value="sim">Sim</option><option value="nao">Não</option><option value="responsavel">Responsável</option></select></div>
+        <div class="full"><label for="responsavel">Responsável presente / quem acompanhou</label><input id="responsavel" type="text" placeholder="Ex.: Cliente, filho do cliente..." /></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>5. Materiais e observações</h2>
+      <div class="grid">
+        <div class="full"><label for="materiais">Material utilizado</label><textarea id="materiais" rows="4" placeholder="1 item por linha. Ex.:
+2 conectores FAST
+1 alinhador"></textarea><p class="helper">Só será incluído no relatório se houver material informado.</p></div>
+        <div class="full"><label for="obs">Observação adicional</label><textarea id="obs" rows="3" placeholder="Opcional"></textarea></div>
+      </div>
+      <div class="actions"><button class="primary wide" id="generateBtn" type="button">Gerar encerramento</button></div>
+      <div id="validation" class="validation" hidden></div>
     </section>
 
     <section class="card result-card">
-      <div class="result-head">
-        <h2>3. Encerramento</h2>
-        <span id="copyStatus"></span>
-      </div>
-      <textarea id="resultado" rows="20" placeholder="O texto gerado aparecerá aqui."></textarea>
-      <button class="success wide" id="copyBtn">Copiar texto</button>
+      <div class="result-head"><h2>6. Encerramento</h2><span id="copyStatus"></span></div>
+      <textarea id="resultado" rows="24" placeholder="O texto gerado aparecerá aqui."></textarea>
+      <div class="actions two"><button class="success" id="copyBtn" type="button">Copiar texto</button><button class="ghost" id="saveBtn" type="button">Salvar no histórico</button></div>
     </section>
-  </main>
 
+    <section class="card">
+      <div class="section-title-row"><h2>Histórico local</h2><button class="small ghost" id="clearHistoryBtn" type="button">Limpar histórico</button></div>
+      <p class="helper">Fica salvo somente neste navegador/aparelho.</p><div id="historyList" class="history-list"></div>
+    </section>
+
+    <datalist id="equipamentos">
+      <option value="ONU Huawei V5"></option><option value="ONU Huawei L5 sem Wi-Fi"></option><option value="ONU Huawei X6 antiga"></option><option value="Huawei X6-10"></option><option value="Huawei X6-10 sem telefonia"></option><option value="Huawei X6-10 com telefonia"></option><option value="Huawei X6-10 sem porta FXS"></option><option value="Huawei X6-10 com porta FXS"></option><option value="ONU Parks"></option><option value="ONU Parks 1100"></option><option value="C Box"></option><option value="C Box K562"></option><option value="C Box K562-E"></option>
+    </datalist>
+  </main>
   <script src="app.js"></script>
 </body>
 </html>
