@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#173f4d" />
+  <title>Gerador de Encerramento 11T</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Equipe 11T</p>
+        <h1>Gerador de Encerramento</h1>
+        <p class="subtitle">Cole os dados do MK, informe o atendimento e gere o texto pronto para colar na OS.</p>
+      </div>
+      <span class="badge">Offline</span>
+    </header>
+
+    <section class="card">
+      <h2>1. Dados copiados do MK</h2>
+      <label for="mkInput">Cole o bloco da OS</label>
+      <textarea id="mkInput" rows="6" placeholder="Exemplo:
+DINO TRENTO
+OS - 495574 / COD 39810
+Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
+
+      <div class="actions two">
+        <button class="primary" id="parseBtn">Identificar dados</button>
+        <button class="ghost" id="clearBtn">Limpar</button>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label for="cliente">Cliente</label>
+          <input id="cliente" type="text" />
+        </div>
+        <div>
+          <label for="os">OS</label>
+          <input id="os" type="text" inputmode="numeric" />
+        </div>
+        <div>
+          <label for="codigo">Código</label>
+          <input id="codigo" type="text" inputmode="numeric" />
+        </div>
+        <div class="full">
+          <label for="endereco">Endereço</label>
+          <input id="endereco" type="text" />
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>2. Atendimento</h2>
+
+      <div class="grid">
+        <div class="full">
+          <label for="tipo">Tipo de serviço</label>
+          <select id="tipo">
+            <option value="upgrade">Upgrade de plano / Troca de equipamento</option>
+            <option value="troca">Troca de equipamento</option>
+            <option value="reparo">Reparo / Cliente offline</option>
+            <option value="wifi">Suporte Wi‑Fi / Lentidão</option>
+            <option value="instalacao">Instalação</option>
+            <option value="telefonia">Telefonia</option>
+            <option value="iptv">IPTV / Equipamento de terceiros</option>
+            <option value="dificuldade">Dificuldade / Sem falha de internet</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="equipAntigo">Equipamento anterior</label>
+          <input id="equipAntigo" type="text" placeholder="Ex.: ONU Parks" />
+        </div>
+        <div>
+          <label for="equipNovo">Equipamento instalado</label>
+          <input id="equipNovo" type="text" placeholder="Ex.: Huawei X6-10" />
+        </div>
+
+        <div>
+          <label for="plano">Plano</label>
+          <input id="plano" type="text" placeholder="Ex.: 500 Mbps" />
+        </div>
+        <div>
+          <label for="gpon">Potência GPON</label>
+          <input id="gpon" type="text" placeholder="Ex.: -24 dBm" />
+        </div>
+
+        <div>
+          <label for="telefonia">Telefonia</label>
+          <select id="telefonia">
+            <option value="na">Não se aplica</option>
+            <option value="sim">Funcionando</option>
+            <option value="nao">Com problema</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="internet">Internet</label>
+          <select id="internet">
+            <option value="sim">Funcionando</option>
+            <option value="nao">Não funcionando</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="acompanhou">Cliente acompanhou os testes?</label>
+          <select id="acompanhou">
+            <option value="sim">Sim</option>
+            <option value="nao">Não</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="responsavel">Responsável presente</label>
+          <input id="responsavel" type="text" value="Cliente" />
+        </div>
+
+        <div class="full">
+          <label for="obs">Observação adicional</label>
+          <textarea id="obs" rows="3" placeholder="Opcional"></textarea>
+        </div>
+      </div>
+
+      <button class="primary wide" id="generateBtn">Gerar encerramento</button>
+    </section>
+
+    <section class="card result-card">
+      <div class="result-head">
+        <h2>3. Encerramento</h2>
+        <span id="copyStatus"></span>
+      </div>
+      <textarea id="resultado" rows="20" placeholder="O texto gerado aparecerá aqui."></textarea>
+      <button class="success wide" id="copyBtn">Copiar texto</button>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

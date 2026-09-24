@@ -1,0 +1,9 @@
+{
+  "name": "Gerador de Encerramento 11T",
+  "short_name": "Encerramento 11T",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#eef3f4",
+  "theme_color": "#173f4d",
+  "description": "Gerador offline de encerramentos de ordens de serviço para a Equipe 11T."
+}
