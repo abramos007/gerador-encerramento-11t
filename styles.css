@@ -59,3 +59,7 @@ button{font:inherit;font-weight:850;border:0;border-radius:12px;padding:12px 14p
 .chip.toggle{cursor:pointer}
 .chip.toggle.active{background:var(--ink);color:#fff;border-color:var(--ink)}
 .spaced{margin-top:14px}
+.group-label{font-size:13px;font-weight:800;color:var(--ink);margin:14px 0 6px}
+.seg-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.seg{background:#f0f2f8;color:#4c5470;border:1px solid #e0e4ef;padding:11px 6px;font-size:13px}
+.seg.active{background:var(--ink);color:#fff;border-color:var(--ink)}

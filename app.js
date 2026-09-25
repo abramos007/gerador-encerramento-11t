@@ -149,6 +149,40 @@ document.querySelectorAll(".toggle").forEach((b) =>
     b.setAttribute("aria-pressed", String(on));
   }),
 );
+const MODO_HINTS = {
+  presencial: "",
+  telefone:
+    "Não registra deslocamento ao local. Campos específicos do tipo (troca, reparo…) são ignorados.",
+  recusado:
+    "Registra que os testes técnicos não foram realizados. Só relato livre e observação entram.",
+};
+function setModo(m) {
+  $("modo").value = m;
+  document
+    .querySelectorAll("[data-modo]")
+    .forEach((b) => b.classList.toggle("active", b.dataset.modo === m));
+  $("modoHint").textContent = MODO_HINTS[m];
+}
+document
+  .querySelectorAll("[data-modo]")
+  .forEach((b) => b.addEventListener("click", () => setModo(b.dataset.modo)));
+function remoteDescription(modo) {
+  const lines = [];
+  if (modo === "telefone") {
+    lines.push("Atendimento realizado somente por telefone.");
+    if (v("tipo") === "dificuldade") {
+      if (queixaSentence()) lines.push(queixaSentence());
+      lines.push(...achadoSentences());
+    }
+  } else {
+    lines.push(
+      "O cliente dispensou o atendimento e não quis prosseguir. Testes técnicos: não realizados.",
+    );
+  }
+  if (v("relatoLivre")) lines.push(sentence(v("relatoLivre")));
+  if (v("obs")) lines.push(sentence(v("obs")));
+  return lines.join("\n\n");
+}
 function v(id) {
   return ($(id)?.value || "").trim();
 }
@@ -369,7 +403,7 @@ function validate() {
         ],
       );
   });
-  if (["upgrade", "troca"].includes(v("tipo"))) {
+  if (v("modo") === "presencial" && ["upgrade", "troca"].includes(v("tipo"))) {
     [
       ["equipRet", "Equipamento retirado"],
       ["qtdRet", "Quantidade retirada"],
@@ -394,6 +428,7 @@ function validate() {
 }
 
 function description() {
+  if (v("modo") !== "presencial") return remoteDescription(v("modo"));
   const t = v("tipo"),
     internet = v("internet"),
     lines = [];
@@ -550,7 +585,7 @@ function materialBlock() {
     : "";
 }
 function equipBlock() {
-  return ["upgrade", "troca"].includes(v("tipo"))
+  return v("modo") === "presencial" && ["upgrade", "troca"].includes(v("tipo"))
     ? `\n\nControle de equipamento:\n\n- Equipamento retirado: ${v("qtdRet")} ${v("equipRet")}\n- Condição: ${v("condicao")}\n- Equipamento instalado: ${v("qtdInst")} ${v("equipInst")}\n- Quantidade: ${v("qtdInst")}\n- Motivo da troca: ${v("motivoTroca")}`
     : "";
 }
@@ -588,6 +623,7 @@ async function copyText(text) {
   }
 }
 function missingTechFields() {
+  if (v("modo") !== "presencial") return [];
   const missing = [];
   if (v("internet") === "na") missing.push("Internet funcionando");
   if (!v("plano")) missing.push("Plano");
@@ -656,7 +692,7 @@ $("saveBtn").onclick = () => {
       merge,
     ),
   );
-  if (["upgrade", "troca"].includes(v("tipo"))) {
+  if (v("modo") === "presencial" && ["upgrade", "troca"].includes(v("tipo"))) {
     setStore(
       TROCAS_KEY,
       upsertRecord(
@@ -809,6 +845,7 @@ function clearForm() {
           "cameraQtd",
           "cameraModelo",
           "tipo",
+          "modo",
         ].includes(el.id)
       )
         return;
@@ -826,6 +863,7 @@ function clearForm() {
   $("copyStatus").textContent = "";
   $("validation").hidden = true;
   resetToggles();
+  setModo("presencial");
   selectService("dificuldade");
 }
 $("clearBtn").onclick = clearForm;
@@ -833,6 +871,7 @@ $("saveConfigBtn").onclick = saveConfig;
 
 applyConfig();
 $("data").value = todayISO();
+setModo("presencial");
 selectService("dificuldade");
 renderHistory();
 renderTrocas();

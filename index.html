@@ -91,6 +91,14 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
           </div>
           <input type="hidden" id="tipo" value="dificuldade">
           <div class="hint" id="tipoHint"></div>
+          <div class="group-label">Modo de atendimento</div>
+          <div class="seg-row">
+            <button class="seg active" data-modo="presencial">Presencial</button>
+            <button class="seg" data-modo="telefone">Só por telefone</button>
+            <button class="seg" data-modo="recusado">Recusado pelo cliente</button>
+          </div>
+          <input type="hidden" id="modo" value="presencial">
+          <div class="hint" id="modoHint"></div>
         </section>
 
         <section class="card dynamic" id="equipSection">
