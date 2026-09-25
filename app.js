@@ -639,15 +639,24 @@ $("clearHistoryBtn").onclick = () => {
 function renderTrocas() {
   let a = getStore(TROCAS_KEY),
     el = $("trocasList");
+  $("trocasCount").textContent = a.length ? `(${a.length})` : "";
   el.innerHTML = a.length
     ? a
         .map(
           (x) =>
-            `<div class="history-item"><strong>${esc(x.cliente)}</strong><div class="history-meta"><span>OS ${esc(x.os)}</span><span>${esc(x.data)}</span></div><div class="hint">Saiu: ${esc(x.ret)}<br>Condição: ${esc(x.cond)}<br>Entrou: ${esc(x.inst)}<br>Motivo: ${esc(x.motivo)}</div></div>`,
+            `<div class="history-item"><strong>${esc(x.cliente)}</strong><div class="history-meta"><span>OS ${esc(x.os)}</span><span>${esc(x.data)}</span></div><div class="hint">Saiu: ${esc(x.ret)}<br>Condição: ${esc(x.cond)}<br>Entrou: ${esc(x.inst)}<br>Motivo: ${esc(x.motivo)}</div><div class="history-actions"><button class="ghost" onclick="delTroca(${x.id})">Excluir</button></div></div>`,
         )
         .join("")
     : '<div class="empty">Nenhuma troca salva.</div>';
 }
+window.delTroca = (id) => {
+  if (!confirm("Excluir esta troca?")) return;
+  setStore(
+    TROCAS_KEY,
+    getStore(TROCAS_KEY).filter((x) => x.id !== id),
+  );
+  renderTrocas();
+};
 $("exportTrocasBtn").onclick = () => {
   let a = getStore(TROCAS_KEY);
   if (!a.length) return alert("Nenhuma troca salva.");
