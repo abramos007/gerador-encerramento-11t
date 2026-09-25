@@ -6,7 +6,7 @@
 body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:#243039}
 .shell{width:min(820px,100%);margin:auto;padding:14px 14px 48px}
 .topbar{background:linear-gradient(135deg,#251973,#342493);padding:16px;border-radius:22px;display:flex;align-items:center;justify-content:space-between;gap:14px;box-shadow:0 12px 30px rgba(37,25,115,.18)}
-.logo{width:min(260px,58vw);height:auto}
+.app-name{color:#fff;font-weight:900;font-size:clamp(20px,5.5vw,26px);letter-spacing:-.01em}
 .top-actions{display:flex;flex-direction:column;gap:7px;align-items:flex-end}
 .pill{background:rgba(22,203,216,.18);border:1px solid rgba(22,203,216,.35);color:#eaffff;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:800}
 .pill.secondary{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2)}
@@ -54,7 +54,6 @@ button{font:inherit;font-weight:850;border:0;border-radius:12px;padding:12px 14p
   .tabs{grid-template-columns:1fr 1fr}
   .button-row{grid-template-columns:1fr}
   .topbar{align-items:flex-start}.top-actions{flex-direction:row;flex-wrap:wrap}
-  .logo{width:min(290px,72vw)}
 }
 .chip.toggle{cursor:pointer}
 .chip.toggle.active{background:var(--ink);color:#fff;border-color:var(--ink)}
