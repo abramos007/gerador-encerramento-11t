@@ -896,6 +896,18 @@ async function importBackup(file) {
     localStorage.setItem(CONFIG_KEY, JSON.stringify(sanitizeConfig(d.config)));
     applyConfig();
   }
+  const exported = Date.parse(d.exportedAt);
+  if (
+    Number.isFinite(exported) &&
+    exported > (Number(getBackupInfo().lastBackupAt) || 0)
+  ) {
+    try {
+      localStorage.setItem(
+        BACKUP_KEY,
+        JSON.stringify({ lastBackupAt: exported }),
+      );
+    } catch {}
+  }
   renderHistory();
   renderTrocas();
   renderBackupStatus();
