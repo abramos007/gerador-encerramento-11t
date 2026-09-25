@@ -532,33 +532,49 @@ function getStore(k) {
 function setStore(k, x) {
   localStorage.setItem(k, JSON.stringify(x));
 }
+function upsertRecord(list, record, limit) {
+  const others = record.os
+    ? list.filter((x) => !(x.os === record.os && x.data === record.data))
+    : list;
+  return [record, ...others].slice(0, limit);
+}
 $("saveBtn").onclick = () => {
   let r = v("resultado");
   if (!r) return alert("Gere o encerramento.");
-  let h = getStore(HISTORY_KEY);
-  h.unshift({
-    id: Date.now(),
-    cliente: v("cliente"),
-    os: v("os"),
-    data: brDate(v("data")),
-    tipo: configs[v("tipo")].title,
-    report: r,
-  });
-  setStore(HISTORY_KEY, h.slice(0, 50));
+  setStore(
+    HISTORY_KEY,
+    upsertRecord(
+      getStore(HISTORY_KEY),
+      {
+        id: Date.now(),
+        cliente: v("cliente"),
+        os: v("os"),
+        data: brDate(v("data")),
+        tipo: configs[v("tipo")].title,
+        report: r,
+      },
+      50,
+    ),
+  );
   if (["upgrade", "troca"].includes(v("tipo"))) {
-    let t = getStore(TROCAS_KEY);
-    t.unshift({
-      id: Date.now(),
-      data: brDate(v("data")),
-      cliente: v("cliente"),
-      os: v("os"),
-      ret: v("qtdRet") + " " + v("equipRet"),
-      cond: v("condicao"),
-      inst: v("qtdInst") + " " + v("equipInst"),
-      qtd: v("qtdInst"),
-      motivo: v("motivoTroca"),
-    });
-    setStore(TROCAS_KEY, t.slice(0, 100));
+    setStore(
+      TROCAS_KEY,
+      upsertRecord(
+        getStore(TROCAS_KEY),
+        {
+          id: Date.now(),
+          data: brDate(v("data")),
+          cliente: v("cliente"),
+          os: v("os"),
+          ret: v("qtdRet") + " " + v("equipRet"),
+          cond: v("condicao"),
+          inst: v("qtdInst") + " " + v("equipInst"),
+          qtd: v("qtdInst"),
+          motivo: v("motivoTroca"),
+        },
+        100,
+      ),
+    );
   }
   $("copyStatus").textContent = "Salvo ✓";
 };
