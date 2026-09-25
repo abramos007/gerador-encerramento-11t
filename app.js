@@ -152,16 +152,29 @@ document.querySelectorAll(".toggle").forEach((b) =>
 const MODO_HINTS = {
   presencial: "",
   telefone:
-    "Não registra deslocamento ao local. Campos específicos do tipo (troca, reparo…) são ignorados.",
+    "Não registra deslocamento ao local, acompanhamento dos testes nem material. Use o relato para descrever o contato.",
   recusado:
-    "Registra que os testes técnicos não foram realizados. Só relato livre e observação entram.",
+    "Registra que os testes técnicos não foram realizados. Só relato e observação entram; dados técnicos e material são ignorados.",
 };
+function applySections() {
+  const type = v("tipo"),
+    modo = v("modo");
+  let show = configs[type].show || [];
+  if (modo === "telefone")
+    show =
+      type === "dificuldade"
+        ? ["dificuldadeSection", "genericSection"]
+        : ["genericSection"];
+  if (modo === "recusado") show = ["genericSection"];
+  dynamic.forEach((id) => ($(id).hidden = !show.includes(id)));
+}
 function setModo(m) {
   $("modo").value = m;
   document
     .querySelectorAll("[data-modo]")
     .forEach((b) => b.classList.toggle("active", b.dataset.modo === m));
   $("modoHint").textContent = MODO_HINTS[m];
+  applySections();
 }
 document
   .querySelectorAll("[data-modo]")
@@ -263,8 +276,7 @@ function selectService(type) {
   document
     .querySelectorAll("#serviceGrid button")
     .forEach((b) => b.classList.toggle("active", b.dataset.service === type));
-  dynamic.forEach((id) => ($(id).hidden = true));
-  (configs[type].show || []).forEach((id) => ($(id).hidden = false));
+  applySections();
   $("tipoHint").textContent = configs[type].hint || "";
   updateEquipmentRule();
 }
@@ -615,6 +627,11 @@ function generate() {
   let cfg = getConfig(),
     codigo = v("codigo") ? `\nCódigo: ${v("codigo")}` : "",
     tech = techLines();
+  if (v("modo") === "recusado") tech = [];
+  if (v("modo") === "telefone")
+    tech = tech.filter(
+      (l) => !/Cliente acompanhou|Responsável presente/.test(l),
+    );
   let r = `Relatório de Ordem de Serviço
 
 Data do atendimento: ${brDate(v("data"))}
@@ -628,7 +645,8 @@ Relatório da Ordem de Serviço
 
 ${description()}`;
   if (tech.length) r += "\n\n" + tech.join("\n");
-  r += materialBlock() + equipBlock();
+  if (v("modo") === "presencial") r += materialBlock();
+  r += equipBlock();
   $("resultado").value = r.trim();
   $("copyStatus").textContent = "Texto gerado";
 }
