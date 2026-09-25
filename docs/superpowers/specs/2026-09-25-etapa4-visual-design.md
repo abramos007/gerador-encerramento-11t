@@ -32,6 +32,10 @@ Esta etapa vem depois da etapa 2 (backup) e estiliza também os elementos criado
 
 ### 1. Remover a marca da interface
 
+> **Já feito e publicado em 2026-09-25** (commits `281bf11` e `da0a1f4`, cache v8): logo,
+> título, manifest e campo "Empresa". Nesta etapa restam só o selo "Equipe 11T", o selo
+> "Offline" e o bloco de abertura.
+
 - Remover `coprel-telecom-logo.png` do repositório, do HTML e do `ASSETS` do `sw.js`.
 - Título da página e do manifest: **"Encerramento 11T"** (`name` e `short_name`).
   Descrição do manifest: "Gerador de encerramentos de OS, offline."
@@ -117,7 +121,8 @@ Tokens CSS em `:root`, trocados por `[data-theme="sol"]` no `<html>`:
   (`purpose: "any"`) e `icon-maskable-512.png` (`purpose: "maskable"`, desenho dentro da
   zona segura de 80%). Também `apple-touch-icon` (180 px) e favicon SVG.
 - Manifest: `icons` com os três PNGs, `background_color` e `theme_color` `#121417`.
-- `sw.js`: `ASSETS` com os ícones novos; `CACHE` passa para `encerramento-11t-v7`.
+- `sw.js`: `ASSETS` com os ícones novos; `CACHE` passa para `encerramento-11t-v9` (a v7 e a
+  v8 já foram usadas na remoção da marca).
 
 ## Fora do escopo
 
