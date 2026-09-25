@@ -805,6 +805,110 @@ function requestPersist() {
 }
 $("shareBackupBtn").onclick = shareBackup;
 $("bannerBackupBtn").onclick = shareBackup;
+const HISTORY_FIELDS = ["cliente", "os", "data", "tipo", "report"];
+const TROCAS_FIELDS = [
+  "data",
+  "cliente",
+  "os",
+  "ret",
+  "cond",
+  "inst",
+  "qtd",
+  "motivo",
+];
+function sanitizeRecords(list, fields) {
+  const valid = [];
+  let invalid = 0;
+  list.forEach((x) => {
+    if (
+      !x ||
+      typeof x !== "object" ||
+      !Number.isSafeInteger(x.id) ||
+      x.id <= 0
+    ) {
+      invalid++;
+      return;
+    }
+    const r = { id: x.id };
+    fields.forEach((f) => (r[f] = String(x[f] ?? "")));
+    valid.push(r);
+  });
+  return { valid, invalid };
+}
+function mergeById(local, incoming, limit) {
+  const seen = new Set(local.map((x) => x.id));
+  const fresh = incoming.filter((x) => !seen.has(x.id) && seen.add(x.id));
+  const all = [...local, ...fresh].sort((a, b) => b.id - a.id);
+  return {
+    list: all.slice(0, limit),
+    added: fresh.length,
+    cut: Math.max(0, all.length - limit),
+  };
+}
+function parseBackup(text) {
+  let d;
+  try {
+    d = JSON.parse(text);
+  } catch {
+    return null;
+  }
+  if (
+    !d ||
+    d.app !== "encerramento-11t" ||
+    !Array.isArray(d.history) ||
+    !Array.isArray(d.trocas)
+  )
+    return null;
+  return d;
+}
+function sanitizeConfig(c) {
+  return {
+    tecnico: String(c.tecnico ?? "Equipe 11T"),
+    empresa: String(c.empresa ?? "Coprel Telecom"),
+    confirmBeforeCopy: c.confirmBeforeCopy !== false,
+  };
+}
+function backupDateLabel(iso) {
+  const d = new Date(iso),
+    p2 = (n) => String(n).padStart(2, "0");
+  if (isNaN(d)) return "Backup sem data";
+  return `Backup de ${p2(d.getDate())}/${p2(d.getMonth() + 1)}/${d.getFullYear()}`;
+}
+async function importBackup(file) {
+  const d = parseBackup(await file.text());
+  if (!d) return alert("Este arquivo não é um backup do Encerramento 11T.");
+  const h = sanitizeRecords(d.history, HISTORY_FIELDS),
+    t = sanitizeRecords(d.trocas, TROCAS_FIELDS),
+    mh = mergeById(getStore(HISTORY_KEY), h.valid, LIMITS.history),
+    mt = mergeById(getStore(TROCAS_KEY), t.valid, LIMITS.trocas);
+  let msg = `${backupDateLabel(d.exportedAt)}: ${d.history.length} OS e ${d.trocas.length} trocas. Novas: ${mh.added} OS e ${mt.added} trocas.`;
+  if (h.invalid + t.invalid)
+    msg += `\n${h.invalid + t.invalid} registros inválidos serão ignorados.`;
+  if (mh.cut + mt.cut)
+    msg += `\nPor causa do limite, ${mh.cut + mt.cut} registros mais antigos ficarão de fora.`;
+  if (!confirm(msg + "\n\nImportar?")) return;
+  if (!setStore(HISTORY_KEY, mh.list) || !setStore(TROCAS_KEY, mt.list)) return;
+  if (
+    localStorage.getItem(CONFIG_KEY) === null &&
+    d.config &&
+    typeof d.config === "object"
+  ) {
+    localStorage.setItem(CONFIG_KEY, JSON.stringify(sanitizeConfig(d.config)));
+    applyConfig();
+  }
+  renderHistory();
+  renderTrocas();
+  renderBackupStatus();
+  alert(
+    `Importação concluída: ${mh.added} OS e ${mt.added} trocas adicionadas.`,
+  );
+}
+$("importBackupBtn").onclick = () => $("importFile").click();
+$("importFile").onchange = async (e) => {
+  const f = e.target.files[0];
+  e.target.value = "";
+  if (f) await importBackup(f);
+};
 function upsertRecord(list, record, limit, merge = true) {
   const others =
     merge && record.os
