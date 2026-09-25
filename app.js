@@ -33,6 +33,58 @@ $("themeBtn").onclick = () => {
     localStorage.setItem(THEME_KEY, t);
   } catch {}
 };
+let sheetHistory = false,
+  pendingBack = false;
+function isSheetOpen() {
+  return !$("sheet").hidden;
+}
+function openSheet() {
+  if (isSheetOpen()) return;
+  $("sheet").hidden = false;
+  $("sheetBackdrop").hidden = false;
+  document.body.classList.add("sheet-open");
+  if (!pendingBack) {
+    try {
+      history.pushState({ sheet: true }, "");
+      sheetHistory = true;
+    } catch {}
+  }
+  $("copyBtn").focus();
+}
+function hideSheet() {
+  $("sheet").hidden = true;
+  $("sheetBackdrop").hidden = true;
+  document.body.classList.remove("sheet-open");
+  $("generateBtn").focus({ preventScroll: true });
+}
+function closeSheet() {
+  if (!isSheetOpen()) return;
+  hideSheet();
+  if (sheetHistory) {
+    sheetHistory = false;
+    pendingBack = true;
+    history.back();
+  }
+}
+window.addEventListener("popstate", () => {
+  if (pendingBack) {
+    pendingBack = false;
+    if (isSheetOpen()) {
+      history.pushState({ sheet: true }, "");
+      sheetHistory = true;
+    }
+    return;
+  }
+  if (sheetHistory) {
+    sheetHistory = false;
+    hideSheet();
+  }
+});
+$("sheetBackdrop").onclick = closeSheet;
+$("sheetGrab").onclick = closeSheet;
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeSheet();
+});
 
 const configs = {
   dificuldade: {
@@ -287,6 +339,7 @@ function applyConfig() {
 }
 
 function switchTab(name) {
+  closeSheet();
   document
     .querySelectorAll(".tab")
     .forEach((b) => b.classList.toggle("active", b.dataset.tab === name));
@@ -680,6 +733,7 @@ ${description()}`;
   r += equipBlock();
   $("resultado").value = r.trim();
   $("copyStatus").textContent = "Texto gerado";
+  openSheet();
 }
 $("generateBtn").onclick = generate;
 
@@ -1046,9 +1100,10 @@ $("historySearch").oninput = renderHistory;
 function openHist(id) {
   let x = getStore(HISTORY_KEY).find((x) => x.id === id);
   if (x) {
-    $("resultado").value = x.report;
     switchTab("nova");
-    setTimeout(() => $("resultado").scrollIntoView({ behavior: "smooth" }), 50);
+    $("resultado").value = x.report;
+    $("copyStatus").textContent = "";
+    openSheet();
   }
 }
 async function copyHist(id) {
