@@ -2,6 +2,7 @@ const $ = (id) => document.getElementById(id);
 const HISTORY_KEY = "coprel11t_history_v3";
 const TROCAS_KEY = "coprel11t_trocas_v3";
 const CONFIG_KEY = "coprel11t_config_v3";
+const LIMITS = { history: 1000, trocas: 2000 };
 
 const configs = {
   dificuldade: {
@@ -692,13 +693,20 @@ $("copyBtn").onclick = async () => {
 
 function getStore(k) {
   try {
-    return JSON.parse(localStorage.getItem(k) || "[]");
+    const x = JSON.parse(localStorage.getItem(k) || "[]");
+    return Array.isArray(x) ? x : [];
   } catch {
     return [];
   }
 }
 function setStore(k, x) {
-  localStorage.setItem(k, JSON.stringify(x));
+  try {
+    localStorage.setItem(k, JSON.stringify(x));
+    return true;
+  } catch {
+    alert("Armazenamento cheio: faça um backup e exclua registros antigos.");
+    return false;
+  }
 }
 function upsertRecord(list, record, limit, merge = true) {
   const others =
@@ -714,42 +722,48 @@ $("saveBtn").onclick = () => {
   let r = v("resultado");
   if (!r) return alert("Gere o encerramento.");
   const merge = reportMatchesOs(r, v("os"));
-  setStore(
-    HISTORY_KEY,
-    upsertRecord(
-      getStore(HISTORY_KEY),
-      {
-        id: Date.now(),
-        cliente: v("cliente"),
-        os: v("os"),
-        data: brDate(v("data")),
-        tipo: configs[v("tipo")].title,
-        report: r,
-      },
-      50,
-      merge,
-    ),
-  );
-  if (v("modo") === "presencial" && ["upgrade", "troca"].includes(v("tipo"))) {
-    setStore(
-      TROCAS_KEY,
+  if (
+    !setStore(
+      HISTORY_KEY,
       upsertRecord(
-        getStore(TROCAS_KEY),
+        getStore(HISTORY_KEY),
         {
           id: Date.now(),
-          data: brDate(v("data")),
           cliente: v("cliente"),
           os: v("os"),
-          ret: v("qtdRet") + " " + v("equipRet"),
-          cond: v("condicao"),
-          inst: v("qtdInst") + " " + v("equipInst"),
-          qtd: v("qtdInst"),
-          motivo: v("motivoTroca"),
+          data: brDate(v("data")),
+          tipo: configs[v("tipo")].title,
+          report: r,
         },
-        100,
+        LIMITS.history,
         merge,
       ),
-    );
+    )
+  )
+    return;
+  if (v("modo") === "presencial" && ["upgrade", "troca"].includes(v("tipo"))) {
+    if (
+      !setStore(
+        TROCAS_KEY,
+        upsertRecord(
+          getStore(TROCAS_KEY),
+          {
+            id: Date.now(),
+            data: brDate(v("data")),
+            cliente: v("cliente"),
+            os: v("os"),
+            ret: v("qtdRet") + " " + v("equipRet"),
+            cond: v("condicao"),
+            inst: v("qtdInst") + " " + v("equipInst"),
+            qtd: v("qtdInst"),
+            motivo: v("motivoTroca"),
+          },
+          LIMITS.trocas,
+          merge,
+        ),
+      )
+    )
+      return;
   }
   $("copyStatus").textContent = "Salvo ✓";
 };
@@ -779,31 +793,31 @@ function renderHistory() {
     ? a
         .map(
           (x) =>
-            `<div class="history-item"><strong>${esc(x.cliente)}</strong><div class="history-meta"><span>OS ${esc(x.os)}</span><span>${esc(x.data)}</span></div><div class="hint">${esc(x.tipo)}</div><div class="history-actions"><button class="ghost" onclick="openHist(${x.id})">Abrir</button><button class="ghost" onclick="copyHist(${x.id})">Copiar</button><button class="ghost" onclick="delHist(${x.id})">Excluir</button></div></div>`,
+            `<div class="history-item"><strong>${esc(x.cliente)}</strong><div class="history-meta"><span>OS ${esc(x.os)}</span><span>${esc(x.data)}</span></div><div class="hint">${esc(x.tipo)}</div><div class="history-actions"><button class="ghost" data-action="open" data-id="${esc(x.id)}">Abrir</button><button class="ghost" data-action="copy" data-id="${esc(x.id)}">Copiar</button><button class="ghost" data-action="del" data-id="${esc(x.id)}">Excluir</button></div></div>`,
         )
         .join("")
     : '<div class="empty">Nenhum registro encontrado.</div>';
 }
 $("historySearch").oninput = renderHistory;
-window.openHist = (id) => {
+function openHist(id) {
   let x = getStore(HISTORY_KEY).find((x) => x.id === id);
   if (x) {
     $("resultado").value = x.report;
     switchTab("nova");
     setTimeout(() => $("resultado").scrollIntoView({ behavior: "smooth" }), 50);
   }
-};
-window.copyHist = async (id) => {
+}
+async function copyHist(id) {
   let x = getStore(HISTORY_KEY).find((x) => x.id === id);
   if (x) await copyText(x.report);
-};
-window.delHist = (id) => {
+}
+function delHist(id) {
   setStore(
     HISTORY_KEY,
     getStore(HISTORY_KEY).filter((x) => x.id !== id),
   );
   renderHistory();
-};
+}
 $("clearHistoryBtn").onclick = () => {
   if (confirm("Excluir todo o histórico?")) {
     setStore(HISTORY_KEY, []);
@@ -819,19 +833,30 @@ function renderTrocas() {
     ? a
         .map(
           (x) =>
-            `<div class="history-item"><strong>${esc(x.cliente)}</strong><div class="history-meta"><span>OS ${esc(x.os)}</span><span>${esc(x.data)}</span></div><div class="hint">Saiu: ${esc(x.ret)}<br>Condição: ${esc(x.cond)}<br>Entrou: ${esc(x.inst)}<br>Motivo: ${esc(x.motivo)}</div><div class="history-actions"><button class="ghost" onclick="delTroca(${x.id})">Excluir</button></div></div>`,
+            `<div class="history-item"><strong>${esc(x.cliente)}</strong><div class="history-meta"><span>OS ${esc(x.os)}</span><span>${esc(x.data)}</span></div><div class="hint">Saiu: ${esc(x.ret)}<br>Condição: ${esc(x.cond)}<br>Entrou: ${esc(x.inst)}<br>Motivo: ${esc(x.motivo)}</div><div class="history-actions"><button class="ghost" data-action="del" data-id="${esc(x.id)}">Excluir</button></div></div>`,
         )
         .join("")
     : '<div class="empty">Nenhuma troca salva.</div>';
 }
-window.delTroca = (id) => {
+function delTroca(id) {
   if (!confirm("Excluir esta troca?")) return;
   setStore(
     TROCAS_KEY,
     getStore(TROCAS_KEY).filter((x) => x.id !== id),
   );
   renderTrocas();
-};
+}
+function listAction(e, handlers) {
+  const b = e.target.closest("button[data-action]");
+  if (b && handlers[b.dataset.action])
+    handlers[b.dataset.action](Number(b.dataset.id));
+}
+$("historyList").addEventListener("click", (e) =>
+  listAction(e, { open: openHist, copy: copyHist, del: delHist }),
+);
+$("trocasList").addEventListener("click", (e) =>
+  listAction(e, { del: delTroca }),
+);
 $("exportTrocasBtn").onclick = () => {
   let a = getStore(TROCAS_KEY);
   if (!a.length) return alert("Nenhuma troca salva.");
