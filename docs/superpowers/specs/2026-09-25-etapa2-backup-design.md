@@ -132,7 +132,7 @@ fora do git), além dos 9 casos existentes:
   some após o backup; não aparece sem histórico.
 - Importação: importar o mesmo arquivo duas vezes adiciona só na primeira; arquivo de
   outro app é recusado sem mudar nada; registro sem `id` é descartado e contado; `id` com
-  código (`"1);alert(1)//"`) é descartado e nada executa; o limite de 50 corta os mais
+  código (`"1);alert(1)//"`) é descartado e nada executa; o limite corta os mais
   antigos e o resumo avisa (teste com limite reduzido via constante); `config` só entra
   em aparelho sem configuração; arquivo `.txt` e `.json` são aceitos.
 - Limites: salvar a 1001ª OS remove só a mais antiga; `QuotaExceededError` simulado
