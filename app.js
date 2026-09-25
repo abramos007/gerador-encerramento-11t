@@ -708,6 +708,94 @@ function setStore(k, x) {
     return false;
   }
 }
+const BACKUP_KEY = "coprel11t_backup_v1";
+const DAY_MS = 24 * 60 * 60 * 1000;
+function getBackupInfo() {
+  try {
+    return JSON.parse(localStorage.getItem(BACKUP_KEY) || "{}") || {};
+  } catch {
+    return {};
+  }
+}
+function buildBackup() {
+  return {
+    app: "encerramento-11t",
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    history: getStore(HISTORY_KEY),
+    trocas: getStore(TROCAS_KEY),
+    config: getConfig(),
+  };
+}
+function backupFileName() {
+  return `backup-encerramento-11t-${todayISO()}.txt`;
+}
+function downloadFile(file) {
+  const url = URL.createObjectURL(file),
+    a = document.createElement("a");
+  a.href = url;
+  a.download = file.name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+async function shareBackup() {
+  const file = new File(
+    [JSON.stringify(buildBackup(), null, 2)],
+    backupFileName(),
+    { type: "text/plain" },
+  );
+  let shared = false;
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({
+        files: [file],
+        title: "Backup Encerramento 11T",
+      });
+      shared = true;
+    } catch (e) {
+      if (e.name === "AbortError") return;
+    }
+  }
+  if (!shared) downloadFile(file);
+  try {
+    localStorage.setItem(
+      BACKUP_KEY,
+      JSON.stringify({ lastBackupAt: Date.now() }),
+    );
+  } catch {}
+  requestPersist();
+  renderBackupStatus();
+  $("backupStatus").textContent = "Backup feito ✓";
+}
+function formatDateTime(ms) {
+  const d = new Date(ms),
+    p2 = (n) => String(n).padStart(2, "0");
+  return `${p2(d.getDate())}/${p2(d.getMonth() + 1)}/${d.getFullYear()} ${p2(d.getHours())}:${p2(d.getMinutes())}`;
+}
+function renderBackupStatus() {
+  const last = getBackupInfo().lastBackupAt;
+  $("backupInfo").textContent = last
+    ? "Último backup: " + formatDateTime(last)
+    : "Nenhum backup ainda";
+}
+async function renderStorageStatus() {
+  const el = $("storageInfo");
+  if (!navigator.storage?.persisted) {
+    el.textContent = "Armazenamento protegido: Não suportado";
+    return;
+  }
+  el.textContent =
+    "Armazenamento protegido: " +
+    ((await navigator.storage.persisted()) ? "Sim" : "Não");
+}
+function requestPersist() {
+  if (navigator.storage?.persist)
+    navigator.storage
+      .persist()
+      .then(renderStorageStatus)
+      .catch(() => {});
+}
+$("shareBackupBtn").onclick = shareBackup;
 function upsertRecord(list, record, limit, merge = true) {
   const others =
     merge && record.os
@@ -766,6 +854,8 @@ $("saveBtn").onclick = () => {
       return;
   }
   $("copyStatus").textContent = "Salvo ✓";
+  requestPersist();
+  renderBackupStatus();
 };
 
 function esc(s) {
@@ -941,6 +1031,8 @@ setAcompanhou("na");
 selectService("dificuldade");
 renderHistory();
 renderTrocas();
+renderBackupStatus();
+renderStorageStatus();
 if ("serviceWorker" in navigator)
   window.addEventListener("load", () =>
     navigator.serviceWorker.register("sw.js"),

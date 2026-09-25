@@ -63,3 +63,4 @@ button{font:inherit;font-weight:850;border:0;border-radius:12px;padding:12px 14p
 .seg-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .seg{background:#f0f2f8;color:#4c5470;border:1px solid #e0e4ef;padding:11px 6px;font-size:13px}
 .seg.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+#backupStatus{font-size:12px;font-weight:900;color:var(--ok)}

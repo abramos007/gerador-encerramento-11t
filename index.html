@@ -454,6 +454,19 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
 
           <button class="primary wide" id="saveConfigBtn">Salvar configurações</button>
         </section>
+        <section class="card">
+          <div class="section-head">
+            <h2>Backup</h2>
+            <span id="backupStatus"></span>
+          </div>
+          <p class="hint" id="backupInfo">Nenhum backup ainda</p>
+          <p class="hint" id="storageInfo"></p>
+          <div class="button-row">
+            <button class="primary" id="shareBackupBtn">Compartilhar backup</button>
+            <button class="ghost" id="importBackupBtn">Importar backup</button>
+          </div>
+          <input type="file" id="importFile" accept=".txt,.json,text/plain,application/json" hidden>
+        </section>
       </section>
     </main>
 
