@@ -358,14 +358,31 @@ document
 function selectService(type) {
   $("tipo").value = type;
   document
-    .querySelectorAll("#serviceGrid button")
+    .querySelectorAll("#serviceGrid button[data-service]")
     .forEach((b) => b.classList.toggle("active", b.dataset.service === type));
   applySections();
   $("tipoHint").textContent = configs[type].hint || "";
   updateEquipmentRule();
 }
+function setOsCollapsed(c) {
+  $("osFields").hidden = c;
+  $("osSummary").hidden = !c;
+  $("osSummary").setAttribute("aria-expanded", String(!c));
+  if (c) {
+    $("osSummaryMain").textContent = `OS ${v("os")} · ${v("cliente")} ▾`;
+    $("osSummarySub").textContent = v("endereco");
+  }
+}
+$("osSummary").onclick = () => setOsCollapsed(false);
+function setMoreTypes(on) {
+  $("serviceGrid").classList.toggle("expanded", on);
+  $("moreTypesBtn").textContent = on ? "− Menos" : "+ Mais";
+  $("moreTypesBtn").setAttribute("aria-expanded", String(on));
+}
+$("moreTypesBtn").onclick = () =>
+  setMoreTypes(!$("serviceGrid").classList.contains("expanded"));
 document
-  .querySelectorAll("#serviceGrid button")
+  .querySelectorAll("#serviceGrid button[data-service]")
   .forEach((b) =>
     b.addEventListener("click", () => selectService(b.dataset.service)),
   );
@@ -386,6 +403,7 @@ function parseMK() {
   $("codigo").value = cm ? cm[1] : "";
   $("endereco").value =
     idx >= 0 ? lines.slice(idx + 1).join(" - ") : lines.slice(2).join(" - ");
+  if (v("os") && v("cliente")) setOsCollapsed(true);
 }
 async function pasteMK() {
   try {
@@ -533,6 +551,8 @@ function validate() {
   }
   const box = $("validation");
   if (e.length) {
+    if (e.some((x) => ["Data", "Cliente", "OS", "Endereço"].includes(x)))
+      setOsCollapsed(false);
     box.hidden = false;
     box.innerHTML =
       "<strong>Antes de gerar:</strong><br>" +
@@ -1226,6 +1246,8 @@ function clearForm() {
   $("copyStatus").textContent = "";
   $("validation").hidden = true;
   resetToggles();
+  setOsCollapsed(false);
+  setMoreTypes(false);
   setModo("presencial");
   setAcompanhou("na");
   selectService("dificuldade");
@@ -1239,6 +1261,7 @@ $("data").value = todayISO();
 setModo("presencial");
 setAcompanhou("na");
 selectService("dificuldade");
+setMoreTypes(false);
 renderHistory();
 renderTrocas();
 renderBackupStatus();

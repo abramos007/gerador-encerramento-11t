@@ -23,7 +23,12 @@
           <button class="mini primary" id="bannerBackupBtn">Fazer backup</button>
         </div>
 
-        <section class="card">
+        <section class="card os-card" id="osCard">
+          <button class="os-summary" id="osSummary" type="button" aria-expanded="false" aria-controls="osFields" hidden>
+            <span class="os-summary-main" id="osSummaryMain"></span>
+            <span class="os-summary-sub" id="osSummarySub"></span>
+          </button>
+          <div id="osFields">
           <div class="section-head">
             <h2>Dados da OS</h2>
             <button class="mini ghost" id="pasteBtn">Colar</button>
@@ -59,25 +64,27 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
               <input id="endereco" type="text">
             </div>
           </div>
+          </div>
         </section>
 
         <section class="card">
           <h2>Tipo de atendimento</h2>
           <div class="service-grid" id="serviceGrid">
             <button data-service="dificuldade">Dificuldade</button>
-            <button data-service="upgrade">Upgrade</button>
-            <button data-service="troca">Troca</button>
             <button data-service="reparo">Reparo / Offline</button>
-            <button data-service="wifi">Wi‑Fi / Lentidão</button>
-            <button data-service="telefonia">Telefonia</button>
-            <button data-service="iptv">IPTV terceiros</button>
-            <button data-service="sky">Sky por antena</button>
-            <button data-service="particular">Rede particular</button>
-            <button data-service="ipv6">IPv6</button>
+            <button data-service="troca">Troca</button>
+            <button data-service="upgrade">Upgrade</button>
             <button data-service="instalacao">Instalação</button>
-            <button data-service="pesquisa">Pesquisa</button>
-            <button data-service="camera">Câmera</button>
-            <button data-service="outro">Outro</button>
+            <button class="more" data-service="wifi">Wi‑Fi / Lentidão</button>
+            <button class="more" data-service="telefonia">Telefonia</button>
+            <button class="more" data-service="iptv">IPTV terceiros</button>
+            <button class="more" data-service="sky">Sky por antena</button>
+            <button class="more" data-service="particular">Rede particular</button>
+            <button class="more" data-service="ipv6">IPv6</button>
+            <button class="more" data-service="pesquisa">Pesquisa</button>
+            <button class="more" data-service="camera">Câmera</button>
+            <button class="more" data-service="outro">Outro</button>
+            <button class="more-toggle" id="moreTypesBtn" type="button" aria-expanded="false">+ Mais</button>
           </div>
           <input type="hidden" id="tipo" value="dificuldade">
           <div class="hint" id="tipoHint"></div>

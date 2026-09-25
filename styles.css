@@ -92,3 +92,9 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .sheet .sheet-actions{grid-template-columns:1fr 1fr;margin-top:0}
 body.sheet-open{overflow:hidden}
 @keyframes sheet-up{from{transform:translateY(100%)}to{transform:none}}
+.os-summary{width:100%;display:flex;flex-direction:column;align-items:flex-start;gap:2px;background:none;padding:4px 0;text-align:left;color:var(--ink)}
+.os-summary-main{font-size:16px;font-weight:800}
+.os-summary-sub{font-size:13px;font-weight:600;color:var(--muted)}
+.service-grid:not(.expanded) .more:not(.active){display:none}
+.service-grid .more-toggle{background:none;color:var(--accent);border:2px dashed var(--chip-line);border-radius:999px;padding:8px 14px;font-size:14px}
+[data-theme="sol"] .service-grid .more-toggle{border-style:solid;border-radius:10px;color:var(--ink)}
