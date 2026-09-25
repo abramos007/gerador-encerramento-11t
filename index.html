@@ -26,23 +26,23 @@
         </div>
 
         <section class="card os-card" id="osCard">
+          <div class="section-head">
+            <h2>Dados da OS</h2>
+            <div class="head-actions">
+              <button class="mini ghost" id="pasteBtn">Colar</button>
+              <button class="mini ghost" id="clearBtn">Limpar</button>
+            </div>
+          </div>
           <button class="os-summary" id="osSummary" type="button" aria-expanded="false" aria-controls="osFields" hidden>
             <span class="os-summary-main" id="osSummaryMain"></span>
             <span class="os-summary-sub" id="osSummarySub"></span>
           </button>
           <div id="osFields">
-          <div class="section-head">
-            <h2>Dados da OS</h2>
-            <button class="mini ghost" id="pasteBtn">Colar</button>
-          </div>
           <label for="mkInput">Bloco copiado do MK</label>
           <textarea id="mkInput" rows="4" placeholder="DINO TRENTO
 OS - 495574 / COD 39810
 Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
-          <div class="button-row">
-            <button class="primary" id="parseBtn">Identificar dados</button>
-            <button class="ghost" id="clearBtn">Limpar</button>
-          </div>
+          <button class="primary wide spaced" id="parseBtn">Identificar dados</button>
 
           <div class="grid">
             <div>

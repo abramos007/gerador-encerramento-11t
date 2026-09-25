@@ -340,6 +340,7 @@ function applyConfig() {
 
 function switchTab(name) {
   closeSheet();
+  hideValidation();
   document
     .querySelectorAll(".tab")
     .forEach((b) => b.classList.toggle("active", b.dataset.tab === name));
@@ -527,15 +528,24 @@ function addMaterial(x) {
   $("materiais").value = cur ? cur + "\n" + x : x;
 }
 
+function hideValidation() {
+  $("validation").hidden = true;
+  document.body.classList.remove("has-validation");
+}
 function validate() {
-  let e = [];
-  ["data", "cliente", "os", "endereco"].forEach((id) => {
-    if (!v(id))
-      e.push(
-        { data: "Data", cliente: "Cliente", os: "OS", endereco: "Endereço" }[
-          id
-        ],
-      );
+  const OS_FIELDS = {
+    data: "Data",
+    cliente: "Cliente",
+    os: "OS",
+    endereco: "Endereço",
+  };
+  const e = [],
+    ids = [];
+  Object.entries(OS_FIELDS).forEach(([id, l]) => {
+    if (!v(id)) {
+      e.push(l);
+      ids.push(id);
+    }
   });
   if (v("modo") === "presencial" && ["upgrade", "troca"].includes(v("tipo"))) {
     [
@@ -546,22 +556,29 @@ function validate() {
       ["qtdInst", "Quantidade instalada"],
       ["motivoTroca", "Motivo da troca"],
     ].forEach(([id, l]) => {
-      if (!v(id)) e.push(l);
+      if (!v(id)) {
+        e.push(l);
+        ids.push(id);
+      }
     });
   }
-  const box = $("validation");
   if (e.length) {
-    if (e.some((x) => ["Data", "Cliente", "OS", "Endereço"].includes(x)))
-      setOsCollapsed(false);
+    if (ids.some((id) => id in OS_FIELDS)) setOsCollapsed(false);
+    const box = $("validation");
     box.hidden = false;
     box.innerHTML =
       "<strong>Antes de gerar:</strong><br>" +
       e.map((x) => "• " + x).join("<br>");
+    document.body.classList.add("has-validation");
+    $(ids[0]).focus();
     return false;
   }
-  box.hidden = true;
+  hideValidation();
   return true;
 }
+["input", "change", "click"].forEach((ev) =>
+  $("tab-nova").addEventListener(ev, hideValidation),
+);
 
 function description() {
   if (v("modo") !== "presencial") return remoteDescription(v("modo"));
@@ -1244,7 +1261,7 @@ function clearForm() {
   $("cameraModelo").value = "Intelbras iM7 S Full Color";
   $("resultado").value = "";
   $("copyStatus").textContent = "";
-  $("validation").hidden = true;
+  hideValidation();
   resetToggles();
   setOsCollapsed(false);
   setMoreTypes(false);

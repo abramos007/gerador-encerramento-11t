@@ -99,3 +99,6 @@ body.sheet-open{overflow:hidden}
 .service-grid .more-toggle{background:none;color:var(--accent);border:2px dashed var(--chip-line);border-radius:999px;padding:8px 14px;font-size:14px}
 [data-theme="sol"] .service-grid .more-toggle{border-style:solid;border-radius:10px;color:var(--ink)}
 .material-quick+textarea,.quick-actions+.grid{margin-top:12px}
+.head-actions{display:flex;gap:8px}
+.validation{max-height:104px;overflow:auto}
+body.has-validation .shell{padding-bottom:calc(300px + env(safe-area-inset-bottom))}
