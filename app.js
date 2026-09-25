@@ -772,11 +772,19 @@ function formatDateTime(ms) {
     p2 = (n) => String(n).padStart(2, "0");
   return `${p2(d.getDate())}/${p2(d.getMonth() + 1)}/${d.getFullYear()} ${p2(d.getHours())}:${p2(d.getMinutes())}`;
 }
+function backupDue(now = Date.now()) {
+  const last = Number(getBackupInfo().lastBackupAt) || 0;
+  const pending = getStore(HISTORY_KEY)
+    .map((x) => Number(x.id))
+    .filter((id) => Number.isFinite(id) && id > last);
+  return pending.length > 0 && now - Math.min(...pending) >= 7 * DAY_MS;
+}
 function renderBackupStatus() {
   const last = getBackupInfo().lastBackupAt;
   $("backupInfo").textContent = last
     ? "Último backup: " + formatDateTime(last)
     : "Nenhum backup ainda";
+  $("backupBanner").hidden = !backupDue();
 }
 async function renderStorageStatus() {
   const el = $("storageInfo");
@@ -796,6 +804,7 @@ function requestPersist() {
       .catch(() => {});
 }
 $("shareBackupBtn").onclick = shareBackup;
+$("bannerBackupBtn").onclick = shareBackup;
 function upsertRecord(list, record, limit, merge = true) {
   const others =
     merge && record.os
