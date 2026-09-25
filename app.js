@@ -183,6 +183,26 @@ function remoteDescription(modo) {
   if (v("obs")) lines.push(sentence(v("obs")));
   return lines.join("\n\n");
 }
+function setAcompanhou(val) {
+  $("acompanhou").value = val;
+  document.querySelectorAll("[data-acomp]").forEach((b) => {
+    const on = b.dataset.acomp === val;
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-pressed", String(on));
+  });
+}
+document
+  .querySelectorAll("[data-acomp]")
+  .forEach((b) =>
+    b.addEventListener("click", () =>
+      setAcompanhou(
+        $("acompanhou").value === b.dataset.acomp ? "na" : b.dataset.acomp,
+      ),
+    ),
+  );
+document
+  .querySelectorAll("[data-plan]")
+  .forEach((b) => (b.onclick = () => ($("plano").value = b.dataset.plan)));
 function v(id) {
   return ($(id)?.value || "").trim();
 }
@@ -846,6 +866,7 @@ function clearForm() {
           "cameraModelo",
           "tipo",
           "modo",
+          "acompanhou",
         ].includes(el.id)
       )
         return;
@@ -864,6 +885,7 @@ function clearForm() {
   $("validation").hidden = true;
   resetToggles();
   setModo("presencial");
+  setAcompanhou("na");
   selectService("dificuldade");
 }
 $("clearBtn").onclick = clearForm;
@@ -872,6 +894,7 @@ $("saveConfigBtn").onclick = saveConfig;
 applyConfig();
 $("data").value = todayISO();
 setModo("presencial");
+setAcompanhou("na");
 selectService("dificuldade");
 renderHistory();
 renderTrocas();

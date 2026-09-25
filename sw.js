@@ -1,4 +1,4 @@
-const CACHE="encerramento-11t-v4";
+const CACHE="encerramento-11t-v5";
 const ASSETS=["./","./index.html","./styles.css","./app.js","./manifest.webmanifest","./coprel-telecom-logo.png"];
 self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});
 self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==CACHE).map(x=>caches.delete(x)))).then(()=>self.clients.claim())));

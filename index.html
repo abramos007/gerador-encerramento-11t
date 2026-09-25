@@ -352,19 +352,30 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
             <div>
               <label for="plano">Plano</label>
               <input id="plano" type="text" placeholder="Ex.: 400 Mbps">
+              <div class="chip-row spaced">
+                <button class="chip" data-plan="200 Mbps">200</button>
+                <button class="chip" data-plan="300 Mbps">300</button>
+                <button class="chip" data-plan="400 Mbps">400</button>
+                <button class="chip" data-plan="500 Mbps">500</button>
+                <button class="chip" data-plan="600 Mbps">600</button>
+                <button class="chip" data-plan="Prime">Prime</button>
+                <button class="chip" data-plan="Residencial Prime">Res. Prime</button>
+                <button class="chip" data-plan="Prime Gamer">Prime Gamer</button>
+                <button class="chip" data-plan="Residencial Combo">Res. Combo</button>
+              </div>
             </div>
             <div>
               <label for="gpon">Sinal GPON</label>
               <input id="gpon" type="text">
             </div>
             <div>
-              <label for="acompanhou">Cliente acompanhou</label>
-              <select id="acompanhou">
-                <option value="na">Não informado</option>
-                <option value="sim">Sim</option>
-                <option value="nao">Não</option>
-                <option value="responsavel">Responsável</option>
-              </select>
+              <div class="group-label">Cliente acompanhou</div>
+              <div class="seg-row">
+                <button class="seg" data-acomp="sim" aria-pressed="false">Sim</button>
+                <button class="seg" data-acomp="nao" aria-pressed="false">Não</button>
+                <button class="seg" data-acomp="responsavel" aria-pressed="false">Responsável</button>
+              </div>
+              <input type="hidden" id="acompanhou" value="na">
             </div>
             <div class="full">
               <label for="responsavel">Responsável presente</label>
