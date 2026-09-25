@@ -552,15 +552,20 @@ function getStore(k) {
 function setStore(k, x) {
   localStorage.setItem(k, JSON.stringify(x));
 }
-function upsertRecord(list, record, limit) {
-  const others = record.os
-    ? list.filter((x) => !(x.os === record.os && x.data === record.data))
-    : list;
+function upsertRecord(list, record, limit, merge = true) {
+  const others =
+    merge && record.os
+      ? list.filter((x) => !(x.os === record.os && x.data === record.data))
+      : list;
   return [record, ...others].slice(0, limit);
+}
+function reportMatchesOs(report, os) {
+  return report.split(/\r?\n/).some((l) => l.trim() === `OS: ${os}`);
 }
 $("saveBtn").onclick = () => {
   let r = v("resultado");
   if (!r) return alert("Gere o encerramento.");
+  const merge = reportMatchesOs(r, v("os"));
   setStore(
     HISTORY_KEY,
     upsertRecord(
@@ -574,6 +579,7 @@ $("saveBtn").onclick = () => {
         report: r,
       },
       50,
+      merge,
     ),
   );
   if (["upgrade", "troca"].includes(v("tipo"))) {
@@ -593,6 +599,7 @@ $("saveBtn").onclick = () => {
           motivo: v("motivoTroca"),
         },
         100,
+        merge,
       ),
     );
   }
