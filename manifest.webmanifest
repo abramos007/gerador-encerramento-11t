@@ -1,10 +1,10 @@
 {
-  "name": "Coprel Telecom | Gerador de Encerramento 11T",
+  "name": "Encerramento 11T",
   "short_name": "Encerramento 11T",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f1f3f9",
   "theme_color": "#251973",
-  "description": "Ferramenta operacional offline para encerramentos da Equipe 11T."
+  "description": "Gerador de encerramentos de OS, offline."
 }

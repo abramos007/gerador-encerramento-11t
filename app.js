@@ -245,7 +245,6 @@ function saveConfig() {
     CONFIG_KEY,
     JSON.stringify({
       tecnico: v("tecnicoPadrao") || "Equipe 11T",
-      empresa: v("empresaPadrao") || "Coprel Telecom",
       confirmBeforeCopy: $("confirmBeforeCopy").checked,
     }),
   );
@@ -254,7 +253,6 @@ function saveConfig() {
 function applyConfig() {
   let c = getConfig();
   $("tecnicoPadrao").value = c.tecnico || "Equipe 11T";
-  $("empresaPadrao").value = c.empresa || "Coprel Telecom";
   $("confirmBeforeCopy").checked = c.confirmBeforeCopy !== false;
 }
 
@@ -864,7 +862,6 @@ function parseBackup(text) {
 function sanitizeConfig(c) {
   return {
     tecnico: String(c.tecnico ?? "Equipe 11T"),
-    empresa: String(c.empresa ?? "Coprel Telecom"),
     confirmBeforeCopy: c.confirmBeforeCopy !== false,
   };
 }
