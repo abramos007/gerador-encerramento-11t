@@ -513,9 +513,29 @@ async function copyText(text) {
     return false;
   }
 }
+function missingTechFields() {
+  const missing = [];
+  if (v("internet") === "na") missing.push("Internet funcionando");
+  if (!v("plano")) missing.push("Plano");
+  if (!v("gpon")) missing.push("Sinal GPON");
+  if (v("acompanhou") === "na") missing.push("Cliente acompanhou");
+  return missing;
+}
 $("copyBtn").onclick = async () => {
   let t = v("resultado");
   if (!t) return alert("Gere o encerramento.");
+  if (getConfig().confirmBeforeCopy !== false) {
+    const missing = missingTechFields();
+    if (
+      missing.length &&
+      !confirm(
+        "Campos técnicos não informados:\n• " +
+          missing.join("\n• ") +
+          "\n\nCopiar mesmo assim?",
+      )
+    )
+      return;
+  }
   let ok = await copyText(t);
   $("copyStatus").textContent = ok
     ? "Copiado ✓"
