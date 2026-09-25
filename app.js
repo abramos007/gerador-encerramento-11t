@@ -3,6 +3,36 @@ const HISTORY_KEY = "coprel11t_history_v3";
 const TROCAS_KEY = "coprel11t_trocas_v3";
 const CONFIG_KEY = "coprel11t_config_v3";
 const LIMITS = { history: 1000, trocas: 2000 };
+const THEME_KEY = "coprel11t_theme";
+const TAB_TITLES = {
+  nova: "Nova OS",
+  historico: "Histórico",
+  trocas: "Trocas",
+  config: "Ajustes",
+};
+function currentTheme() {
+  return document.documentElement.dataset.theme === "sol" ? "sol" : "escuro";
+}
+function applyTheme(t) {
+  const sol = t === "sol";
+  if (sol) document.documentElement.dataset.theme = "sol";
+  else delete document.documentElement.dataset.theme;
+  document.querySelector('meta[name="theme-color"]').content = sol
+    ? "#ffffff"
+    : "#121417";
+  $("themeBtn").textContent = sol ? "☾" : "☀";
+  $("themeBtn").setAttribute(
+    "aria-label",
+    sol ? "Ativar tema escuro" : "Ativar modo sol",
+  );
+}
+$("themeBtn").onclick = () => {
+  const t = currentTheme() === "sol" ? "escuro" : "sol";
+  applyTheme(t);
+  try {
+    localStorage.setItem(THEME_KEY, t);
+  } catch {}
+};
 
 const configs = {
   dificuldade: {
@@ -263,6 +293,8 @@ function switchTab(name) {
   document
     .querySelectorAll(".tab-panel")
     .forEach((p) => p.classList.toggle("active", p.id === `tab-${name}`));
+  $("screenTitle").textContent = TAB_TITLES[name];
+  $("ctaBar").hidden = name !== "nova";
   if (name === "historico") renderHistory();
   if (name === "trocas") renderTrocas();
 }
@@ -1147,6 +1179,7 @@ $("clearBtn").onclick = clearForm;
 $("saveConfigBtn").onclick = saveConfig;
 
 applyConfig();
+applyTheme(currentTheme());
 $("data").value = todayISO();
 setModo("presencial");
 setAcompanhou("na");

@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#251973" />
+  <meta name="theme-color" content="#121417" />
+  <script>try{if(localStorage.getItem("coprel11t_theme")==="sol"){document.documentElement.dataset.theme="sol";document.querySelector('meta[name="theme-color"]').content="#ffffff"}}catch(e){}</script>
   <title>Encerramento 11T</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="styles.css" />
@@ -11,35 +12,20 @@
 <body>
   <div class="shell">
     <header class="topbar">
-      <span class="app-name">Encerramento 11T</span>
-      <div class="top-actions">
-        <span class="pill">Equipe 11T</span>
-        <span class="pill secondary">Offline</span>
-      </div>
+      <h1 class="screen-title" id="screenTitle">Nova OS</h1>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Ativar modo sol">☀</button>
     </header>
-
-    <nav class="tabs">
-      <button class="tab active" data-tab="nova">Nova OS</button>
-      <button class="tab" data-tab="historico">Histórico</button>
-      <button class="tab" data-tab="trocas">Trocas</button>
-      <button class="tab" data-tab="config">Configurações</button>
-    </nav>
 
     <main>
       <section id="tab-nova" class="tab-panel active">
         <div class="backup-banner" id="backupBanner" hidden>
-          <span>Há OS salvas há 7 dias ou mais sem backup</span>
+          <span>7 dias sem backup</span>
           <button class="mini primary" id="bannerBackupBtn">Fazer backup</button>
         </div>
-        <section class="hero">
-          <p class="eyebrow">Base Operacional</p>
-          <h1>Gerador de Encerramento</h1>
-          <p>Informe apenas o que realmente ocorreu. O app organiza o relatório no padrão da Equipe 11T.</p>
-        </section>
 
         <section class="card">
           <div class="section-head">
-            <h2>1. Dados da OS</h2>
+            <h2>Dados da OS</h2>
             <button class="mini ghost" id="pasteBtn">Colar</button>
           </div>
           <label for="mkInput">Bloco copiado do MK</label>
@@ -76,7 +62,7 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
         </section>
 
         <section class="card">
-          <h2>2. Tipo de atendimento</h2>
+          <h2>Tipo de atendimento</h2>
           <div class="service-grid" id="serviceGrid">
             <button data-service="dificuldade">Dificuldade</button>
             <button data-service="upgrade">Upgrade</button>
@@ -106,7 +92,7 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
         </section>
 
         <section class="card dynamic" id="equipSection">
-          <h2>3. Controle de equipamento</h2>
+          <h2>Controle de equipamento</h2>
 
           <div class="preset-block">
             <span>Trocas rápidas</span>
@@ -155,7 +141,7 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
         </section>
 
         <section class="card dynamic" id="reparoSection" hidden>
-          <h2>3. Reparo / Offline</h2>
+          <h2>Reparo / Offline</h2>
           <div class="quick-actions">
             <button class="chip repair-chip" data-repair="fast-interno">FAST interno</button>
             <button class="chip repair-chip" data-repair="fast-cto">FAST CTO</button>
@@ -190,7 +176,7 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
         </section>
 
         <section class="card dynamic" id="wifiSection" hidden>
-          <h2>3. Wi‑Fi / Rede interna</h2>
+          <h2>Wi‑Fi / Rede interna</h2>
           <div class="grid">
             <div class="full">
               <label for="wifiAchado">Constatação</label>
@@ -216,7 +202,7 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
         </section>
 
         <section class="card dynamic" id="iptvSection" hidden>
-          <h2>3. IPTV de terceiros</h2>
+          <h2>IPTV de terceiros</h2>
           <div class="grid">
             <div>
               <label for="outrosApps">Outros aplicativos testados</label>
@@ -238,12 +224,12 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
         </section>
 
         <section class="card dynamic" id="skySection" hidden>
-          <h2>3. Sky gato por antena</h2>
+          <h2>Sky gato por antena</h2>
           <div class="hint">Este cenário é mantido separado de IPTV de terceiros.</div>
         </section>
 
         <section class="card dynamic" id="telefoniaSection" hidden>
-          <h2>3. Telefonia</h2>
+          <h2>Telefonia</h2>
           <div class="grid">
             <div>
               <label for="numeroTel">Número</label>
@@ -261,7 +247,7 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
         </section>
 
         <section class="card dynamic" id="ipv6Section" hidden>
-          <h2>3. IPv6</h2>
+          <h2>IPv6</h2>
           <div class="grid">
             <div>
               <label for="ipv6Desat">IPv6 estava desativado</label>
@@ -283,7 +269,7 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
         </section>
 
         <section class="card dynamic" id="cameraSection" hidden>
-          <h2>3. Instalação de câmera</h2>
+          <h2>Instalação de câmera</h2>
           <div class="grid">
             <div>
               <label for="cameraModelo">Modelo</label>
@@ -301,7 +287,7 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
         </section>
 
         <section class="card dynamic" id="dificuldadeSection">
-          <h2>3. Dificuldade</h2>
+          <h2>Dificuldade</h2>
           <div class="preset-block">
             <span>Queixa do cliente</span>
             <div class="chip-row">
@@ -331,12 +317,12 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
         </section>
 
         <section class="card dynamic" id="genericSection" hidden>
-          <h2>3. Relato técnico</h2>
+          <h2>Relato técnico</h2>
           <textarea id="relatoLivre" rows="5" placeholder="Descreva somente o que realmente ocorreu"></textarea>
         </section>
 
         <section class="card">
-          <h2>4. Informações técnicas</h2>
+          <h2>Informações técnicas</h2>
           <div class="quick-actions">
             <button class="chip gpon-chip" data-gpon="-18 dBm">-18</button>
             <button class="chip gpon-chip" data-gpon="-21 dBm">-21</button>
@@ -389,7 +375,7 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
         </section>
 
         <section class="card">
-          <h2>5. Materiais</h2>
+          <h2>Materiais</h2>
           <div class="material-quick">
             <button class="chip material-chip" data-material="1 conector FAST">+ FAST</button>
             <button class="chip material-chip" data-material="1 conector FAST APC">+ FAST APC</button>
@@ -403,14 +389,10 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
           <textarea id="obs" rows="3"></textarea>
         </section>
 
-        <section class="card">
-          <div id="validation" class="validation" hidden></div>
-          <button class="primary wide" id="generateBtn">Gerar encerramento</button>
-        </section>
 
         <section class="card result-card">
           <div class="section-head">
-            <h2>6. Encerramento</h2>
+            <h2>Encerramento</h2>
             <span id="copyStatus"></span>
           </div>
           <textarea id="resultado" rows="24"></textarea>
@@ -444,7 +426,7 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
 
       <section id="tab-config" class="tab-panel">
         <section class="card">
-          <h2>Configurações</h2>
+          <h2>Relatório</h2>
           <label for="tecnicoPadrao">Técnico responsável</label>
           <input id="tecnicoPadrao" type="text" value="Equipe 11T">
 
@@ -470,6 +452,18 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
         </section>
       </section>
     </main>
+
+    <div class="cta-bar" id="ctaBar">
+      <div id="validation" class="validation" hidden></div>
+      <button class="primary wide" id="generateBtn">Gerar encerramento</button>
+    </div>
+
+    <nav class="bottom-nav" aria-label="Navegação">
+      <button class="tab active" data-tab="nova"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M12 12v6M9 15h6"/></svg><span>Nova OS</span></button>
+      <button class="tab" data-tab="historico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Histórico</span></button>
+      <button class="tab" data-tab="trocas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h14l-3-3M20 16H6l3 3"/></svg><span>Trocas</span></button>
+      <button class="tab" data-tab="config"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg><span>Ajustes</span></button>
+    </nav>
 
     <datalist id="equipamentos">
       <option value="ONU Huawei V5">
