@@ -19,14 +19,28 @@ aqui, passaram para a etapa 4, porque dependem da nova identidade.
 
 - HTML/CSS/JS puros, `app.js` único, sem build e sem dependências.
 - Chaves existentes inalteradas: `coprel11t_history_v3`, `coprel11t_trocas_v3`,
-  `coprel11t_config_v3`. Limites inalterados: histórico 50, trocas 100.
+  `coprel11t_config_v3`.
 - Texto dos relatórios inalterado.
 
 ## Escopo
 
+### 0. Limites maiores
+
+- Histórico passa de 50 para **1000** registros; trocas, de 100 para **2000**
+  (constantes `HISTORY_LIMIT` e `TROCAS_LIMIT` no `app.js`, usadas ao salvar e ao
+  importar). Motivo: com 3 a 5 OS por dia, 50 registros cobriam só 2 a 3 semanas e o
+  mais antigo era apagado sem aviso; o backup não protege o que já foi cortado.
+- Estimativa: ~1,5 KB por relatório → ~1,5 MB para 1000 OS, dentro da cota do
+  `localStorage`. Se a gravação falhar por cota (`QuotaExceededError`), o app mostra
+  "Armazenamento cheio: faça um backup e exclua registros antigos." e não perde o que já
+  estava salvo.
+
 ### 1. Arquivo de backup
 
-- Nome: `backup-encerramento-11t-AAAA-MM-DD.json` (data local do dia).
+- Nome: `backup-encerramento-11t-AAAA-MM-DD.txt` (data local do dia), tipo
+  `text/plain`. O conteúdo é JSON, mas a extensão é `.txt` porque o compartilhamento de
+  arquivos do Chrome no Android aceita só alguns formatos (texto, PDF, imagem, CSV…) e,
+  até onde se sabe, não aceita `.json`.
 - Conteúdo (JSON):
   ```json
   { "app": "encerramento-11t", "version": 1, "exportedAt": "<ISO 8601>",
@@ -60,7 +74,8 @@ aqui, passaram para a etapa 4, porque dependem da nova identidade.
 
 ### 4. Importar backup (Configurações, card "Backup")
 
-- Botão **Importar backup** abre a escolha de arquivo (`accept=".json,application/json"`).
+- Botão **Importar backup** abre a escolha de arquivo
+  (`accept=".txt,.json,text/plain,application/json"`).
 - **Validação do arquivo:** JSON válido, `app === "encerramento-11t"`, `history` e
   `trocas` são listas. Caso contrário: alerta "Este arquivo não é um backup do
   Encerramento 11T." e nada muda.
@@ -72,7 +87,7 @@ aqui, passaram para a etapa 4, porque dependem da nova identidade.
   - Trocas: `id, data, cliente, os, ret, cond, inst, qtd, motivo`.
 - **Junção:** registro cujo `id` já existe no celular é ignorado (o do celular fica).
   Os demais entram; a lista é ordenada por `id` decrescente e cortada no limite
-  (50 / 100).
+  (1000 / 2000).
 - **Resumo antes de gravar** (`confirm`):
   "Backup de DD/MM/AAAA: N OS e M trocas. Novas: X OS e Y trocas." e, quando houver,
   "Z registros inválidos serão ignorados." e "Por causa do limite, W registros mais
@@ -118,7 +133,13 @@ fora do git), além dos 9 casos existentes:
 - Importação: importar o mesmo arquivo duas vezes adiciona só na primeira; arquivo de
   outro app é recusado sem mudar nada; registro sem `id` é descartado e contado; `id` com
   código (`"1);alert(1)//"`) é descartado e nada executa; o limite de 50 corta os mais
-  antigos e o resumo avisa; `config` só entra em aparelho sem configuração.
+  antigos e o resumo avisa (teste com limite reduzido via constante); `config` só entra
+  em aparelho sem configuração; arquivo `.txt` e `.json` são aceitos.
+- Limites: salvar a 1001ª OS remove só a mais antiga; `QuotaExceededError` simulado
+  mostra a mensagem e mantém os dados anteriores.
+- **Teste no celular real (técnico):** tocar em "Compartilhar backup" no Android abre o
+  menu de compartilhamento com o arquivo `.txt`, e esse arquivo importado de volta
+  restaura os dados.
 - `getStore` com `"null"` e `"{}"` salvos: telas abrem sem erro.
 - Excluir no Histórico e nas Trocas continua funcionando pela delegação.
 - Console sem erros.
