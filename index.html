@@ -74,6 +74,7 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
         <section class="card">
           <h2>2. Tipo de atendimento</h2>
           <div class="service-grid" id="serviceGrid">
+            <button data-service="dificuldade">Dificuldade</button>
             <button data-service="upgrade">Upgrade</button>
             <button data-service="troca">Troca</button>
             <button data-service="reparo">Reparo / Offline</button>
@@ -88,7 +89,7 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
             <button data-service="camera">Câmera</button>
             <button data-service="outro">Outro</button>
           </div>
-          <input type="hidden" id="tipo" value="upgrade">
+          <input type="hidden" id="tipo" value="dificuldade">
           <div class="hint" id="tipoHint"></div>
         </section>
 
@@ -283,6 +284,36 @@ Linha 25 - 1 - Interior - Marau - INTERIOR S NUMERO"></textarea>
             <div class="full">
               <label for="cameraOrient">Orientações fornecidas</label>
               <input id="cameraOrient" type="text">
+            </div>
+          </div>
+        </section>
+
+        <section class="card dynamic" id="dificuldadeSection">
+          <h2>3. Dificuldade</h2>
+          <div class="preset-block">
+            <span>Queixa do cliente</span>
+            <div class="chip-row">
+              <button class="chip toggle" data-queixa="tv" aria-pressed="false">TV travando</button>
+              <button class="chip toggle" data-queixa="quedas" aria-pressed="false">Quedas/oscilações</button>
+              <button class="chip toggle" data-queixa="lentidao" aria-pressed="false">Lentidão</button>
+              <button class="chip toggle" data-queixa="semnet" aria-pressed="false">Sem internet</button>
+              <button class="chip toggle" data-queixa="wifi" aria-pressed="false">Pouco alcance do Wi-Fi</button>
+            </div>
+          </div>
+          <label for="queixaTexto">Outra queixa</label>
+          <input id="queixaTexto" type="text" placeholder="Ex.: sem sinal na sala">
+          <div class="preset-block spaced">
+            <span>O que foi constatado / orientado</span>
+            <div class="chip-row">
+              <button class="chip toggle" data-achado="conexao" aria-pressed="false">Conexão normal</button>
+              <button class="chip toggle" data-achado="testes" aria-pressed="false">Testes de navegação/streaming</button>
+              <button class="chip toggle" data-achado="semquedas" aria-pressed="false">Sem quedas registradas</button>
+              <button class="chip toggle" data-achado="iptv" aria-pressed="false">IPTV de terceiros</button>
+              <button class="chip toggle" data-achado="iptvOrient" aria-pressed="false">Orientado: responsável pelo IPTV</button>
+              <button class="chip toggle" data-achado="sky" aria-pressed="false">Sky gato</button>
+              <button class="chip toggle" data-achado="skyOrient" aria-pressed="false">Orientado: responsável pela TV</button>
+              <button class="chip toggle" data-achado="particular" aria-pressed="false">Rede/equipamento particular</button>
+              <button class="chip toggle" data-achado="reiniciar" aria-pressed="false">Orientado a reiniciar</button>
             </div>
           </div>
         </section>

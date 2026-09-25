@@ -4,6 +4,11 @@ const TROCAS_KEY = "coprel11t_trocas_v3";
 const CONFIG_KEY = "coprel11t_config_v3";
 
 const configs = {
+  dificuldade: {
+    title: "Dificuldade",
+    show: ["dificuldadeSection", "genericSection"],
+    hint: "Ligue só o que realmente ocorreu: cada botão vira uma frase do relato.",
+  },
   upgrade: {
     title: "Upgrade de plano / Troca de equipamento",
     show: ["equipSection"],
@@ -80,8 +85,70 @@ const dynamic = [
   "skySection",
   "ipv6Section",
   "cameraSection",
+  "dificuldadeSection",
   "genericSection",
 ];
+const QUEIXAS = {
+  tv: "TV travando",
+  quedas: "quedas/oscilações",
+  lentidao: "lentidão",
+  semnet: "sem internet",
+  wifi: "pouco alcance do Wi-Fi",
+};
+const ACHADOS = {
+  conexao:
+    "A conexão da Coprel Telecom apresentou funcionamento normal durante o atendimento.",
+  testes: "Foram realizados testes de navegação e streaming.",
+  semquedas: "Não foram identificadas quedas registradas.",
+  iptv: "O cliente utiliza IPTV de terceiros.",
+  iptvOrient:
+    "O cliente foi orientado a procurar o responsável pelo serviço caso a dificuldade persista somente no IPTV.",
+  sky: "Foi constatado que o cliente utiliza Sky gato por antena.",
+  skyOrient:
+    "O cliente foi orientado a buscar auxílio com o responsável pelo serviço de TV.",
+  particular:
+    "Foi constatada a utilização de equipamento/rede interna particular.",
+  reiniciar:
+    "O cliente foi orientado a reiniciar o equipamento da Coprel Telecom caso o problema ocorra novamente.",
+};
+function activeKeys(attr) {
+  return new Set(
+    [...document.querySelectorAll(`[data-${attr}].active`)].map(
+      (b) => b.dataset[attr],
+    ),
+  );
+}
+function joinList(items) {
+  if (items.length < 2) return items.join("");
+  return items.slice(0, -1).join(", ") + " e " + items[items.length - 1];
+}
+function queixaSentence() {
+  const on = activeKeys("queixa");
+  const items = Object.keys(QUEIXAS)
+    .filter((k) => on.has(k))
+    .map((k) => QUEIXAS[k]);
+  const extra = v("queixaTexto").replace(/[.!?]+$/, "");
+  if (extra) items.push(extra);
+  return items.length ? `O cliente relatou: ${joinList(items)}.` : "";
+}
+function achadoSentences() {
+  const on = activeKeys("achado");
+  return Object.keys(ACHADOS)
+    .filter((k) => on.has(k))
+    .map((k) => ACHADOS[k]);
+}
+function resetToggles() {
+  document.querySelectorAll(".toggle").forEach((b) => {
+    b.classList.remove("active");
+    b.setAttribute("aria-pressed", "false");
+  });
+}
+document.querySelectorAll(".toggle").forEach((b) =>
+  b.addEventListener("click", () => {
+    const on = b.classList.toggle("active");
+    b.setAttribute("aria-pressed", String(on));
+  }),
+);
 function v(id) {
   return ($(id)?.value || "").trim();
 }
@@ -441,6 +508,13 @@ function description() {
       "Realizado atendimento técnico para instalação e ativação dos serviços no endereço do cliente.",
     );
     if (v("relatoLivre")) lines.push(sentence(v("relatoLivre")));
+  } else if (t === "dificuldade") {
+    lines.push(
+      "Realizado atendimento técnico para verificação da dificuldade relatada pelo cliente.",
+    );
+    if (queixaSentence()) lines.push(queixaSentence());
+    lines.push(...achadoSentences());
+    if (v("relatoLivre")) lines.push(sentence(v("relatoLivre")));
   } else if (v("relatoLivre")) lines.push(sentence(v("relatoLivre")));
   if (["upgrade", "troca"].includes(t))
     lines.push(
@@ -751,14 +825,15 @@ function clearForm() {
   $("resultado").value = "";
   $("copyStatus").textContent = "";
   $("validation").hidden = true;
-  selectService("upgrade");
+  resetToggles();
+  selectService("dificuldade");
 }
 $("clearBtn").onclick = clearForm;
 $("saveConfigBtn").onclick = saveConfig;
 
 applyConfig();
 $("data").value = todayISO();
-selectService("upgrade");
+selectService("dificuldade");
 renderHistory();
 renderTrocas();
 if ("serviceWorker" in navigator)

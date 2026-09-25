@@ -56,3 +56,6 @@ button{font:inherit;font-weight:850;border:0;border-radius:12px;padding:12px 14p
   .topbar{align-items:flex-start}.top-actions{flex-direction:row;flex-wrap:wrap}
   .logo{width:min(290px,72vw)}
 }
+.chip.toggle{cursor:pointer}
+.chip.toggle.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.spaced{margin-top:14px}
